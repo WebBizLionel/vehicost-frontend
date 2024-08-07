@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import WelcomeScreen from './screens/WelcomeScreen';
 import SigninScreen from './screens/SigninScreen';
 import SignupScreen from './screens/SignupScreen';
+import AddVehicleScreen from './screens/AddVehicleScreen'
 
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -55,7 +56,7 @@ export default function App() {
        <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Sign up" component={SignupScreen} />
+          <Stack.Screen name="Add Vehicle" component={AddVehicleScreen} />
           <Stack.Screen name="Sign in" component={SigninScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>

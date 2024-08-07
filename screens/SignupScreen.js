@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View , Image, TextInput, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
-import React, { useState, useEffect  } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import Checkbox from 'expo-checkbox';
 import { url_backend } from '../configuration/config';
 import { addUsername } from '../ reducers/user';
+import PhoneInput from 'react-native-international-phone-number';
 
 
 const SignupScreen = ({ navigation }) => {
@@ -15,10 +15,10 @@ const SignupScreen = ({ navigation }) => {
 //STATES OF INPUTS
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
-  const [country, setCountry] = useState("");
-  const [isChecked, setChecked] = useState(false);
+const [isChecked, setChecked] = useState(false);
+const [selectedCountry, setSelectedCountry] = useState(null);
+const [phoneNumber, setphoneNumber] = useState('');
 
 //STATE OF ERROR 
 const [errorUsername, setErrorUsername] = useState("");
@@ -44,19 +44,36 @@ const handleSubmit = () => {
   })
 };
 
+function handlephoneNumber(phoneNumber) {
+  setphoneNumber(phoneNumber);
+}
+
+function handleSelectedCountry(country) {
+  setSelectedCountry(country);
+}
   return (
-    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={styles.container}>   
-      <View>
+    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={styles.container}>
+      <View style={styles.container}>
       <Text style={styles.baseText}>Bienvenue sur VehiCost</Text>
       </View>
       <View style={styles.field} >
-      <TextInput style={styles.input} placeholder="Username*" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username}  type="text" id="username"/>
+      <TextInput style={styles.input} placeholder="Nom d'utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username}  type="text" id="username"/>
         <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
-      <TextInput style={styles.input} placeholder="Email*" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
+      <TextInput style={styles.input} placeholder="Email *" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
       <Text style={styles.error}>{errorEmail.length > 0 && errorEmail}</Text>
        <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
        <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
-       <TextInput style={styles.input} placeholder="Telephone" keyboardType="numeric" onChangeText= {(value) => setMobile(value)} value={mobile} id="mobile"/>
+       <PhoneInput onChangeText={(value) => setphoneNumber(value)}  
+       value={phoneNumber}
+        onChangePhoneNumber={handlephoneNumber}
+        selectedCountry={selectedCountry}
+        onChangeSelectedCountry={handleSelectedCountry}
+        language='fr'
+        defaultCountry='fr'
+        showOnly={['FR', 'ES']}
+        modalDisabled
+        placeholder='Téléphone'
+        customCarret={'<></>'}/>
        <TextInput style={styles.input} placeholder="Pays" keyboardType="text" onChangeText= {(value)  => setCountry(value)} value={country} id="country"/>
       </View>
       <View style={styles.section}>
@@ -69,8 +86,9 @@ const handleSubmit = () => {
         <Text style={styles.textbtn}>S'inscrire</Text>
       </TouchableOpacity>
 
-      </View>
+      </View>  
     </KeyboardAvoidingView>
+
   )
 }
 
@@ -81,9 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  image: {
-    marginBottom: 40, 
+    paddingHorizontal:16,
   },
   section: {
     flexDirection: 'row',
@@ -94,34 +110,38 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   checkbox: {
-    margin: 10,
-    padding: 10,
+    margin: 8,
+    padding: 8,
 
   },
   baseText: {
     fontSize: 25,
-    marginBottom: 70, 
+    marginBottom: 30, 
   }, 
   input: {
     fontSize: 20,
-    marginBottom: 15, 
+    marginBottom: 70, 
     padding: 10,
     borderWidth: 1,
     borderColor: '#038737',
-    margin: 12,
+    marginBottom: 16,
 
   },
   btn: {
-    alignItems: 'center',
-    paddingTop: 15,
-    marginTop: 60,
-    backgroundColor: '#038737',
-    borderRadius: 5,
-    padding: 10,
+    marginTop: 30,
+    elevation: 8,
+    backgroundColor: "#038737",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: 300,
   },
   textbtn: {
-    color: "#ffff",
     fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
   },
   error: {
     color:'red',
