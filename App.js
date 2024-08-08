@@ -57,6 +57,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Add Vehicle" component={AddVehicleScreen} />
+          <Stack.Screen name="Sign Up" component={SignupScreen} />
           <Stack.Screen name="Sign in" component={SigninScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>

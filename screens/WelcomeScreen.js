@@ -20,11 +20,11 @@ const WelcomeScreen = ({ navigation }) => {
 
       {/* Button section */}
       <View>
-      <TouchableOpacity onPress={() => navigation.navigate('Add Vehicle') }>
+      <TouchableOpacity onPress={() => navigation.navigate('Sign Up') }>
         <Text>INSCRIPTION</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Sign in') }>
+      <TouchableOpacity onPress={() => navigation.navigate('Add Vehicle') }>
         <Text>Se connecter</Text>
       </TouchableOpacity>
 

@@ -13,9 +13,10 @@ const SignupScreen = ({ navigation }) => {
   const dispatch = useDispatch(); 
 
 //STATES OF INPUTS
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const [username, setUsername] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [country, setCountry] = useState("");
 const [isChecked, setChecked] = useState(false);
 const [selectedCountry, setSelectedCountry] = useState(null);
 const [phoneNumber, setphoneNumber] = useState('');
@@ -51,9 +52,21 @@ function handlephoneNumber(phoneNumber) {
 function handleSelectedCountry(country) {
   setSelectedCountry(country);
 }
+
+function handleBack() {
+  navigation.navigate('Welcome');
+}
+
   return (
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={styles.container}>
       <View style={styles.container}>
+      <View style={styles.backpage}>
+        
+      <TouchableOpacity onPress={() => handleBack()}>
+        <Text style={styles.msgback}>Retour</Text>
+      </TouchableOpacity>
+      </View>
+
       <Text style={styles.baseText}>Bienvenue sur VehiCost</Text>
       </View>
       <View style={styles.field} >
@@ -63,6 +76,7 @@ function handleSelectedCountry(country) {
       <Text style={styles.error}>{errorEmail.length > 0 && errorEmail}</Text>
        <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
        <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
+       
        <PhoneInput onChangeText={(value) => setphoneNumber(value)}  
        value={phoneNumber}
         onChangePhoneNumber={handlephoneNumber}
@@ -74,6 +88,7 @@ function handleSelectedCountry(country) {
         modalDisabled
         placeholder='Téléphone'
         customCarret={'<></>'}/>
+
        <TextInput style={styles.input} placeholder="Pays" keyboardType="text" onChangeText= {(value)  => setCountry(value)} value={country} id="country"/>
       </View>
       <View style={styles.section}>
