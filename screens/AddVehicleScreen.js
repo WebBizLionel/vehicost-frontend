@@ -1,77 +1,76 @@
-/* import { View, TextInput, StyleSheet, Text ,TouchableOpacity, Image  } from 'react-native';
-import React, { useState } from 'react';
+import { View, TextInput, StyleSheet, Text ,TouchableOpacity, Image  } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import Tooltip from 'react-native-walkthrough-tooltip';
+import { addVehicle } from '../ reducers/user';
+import { useSelector } from 'react-redux';
+import { url_backend } from '../configuration/config';
+import { addPic } from '../ reducers/user';
+
 
 const AddVehicleScreen = ({ navigation }) => {
-  
-//STATE OF INPUT 
-  const [plate, setPlate] = useState('');
-  const [car_registration, setCar_Registration] = useState('');
 
-  const [toolTip, setToolTip] = useState(false);
-
-//STATE CHANGE STYLE 
-/* 
-
-const [color, setColor] = useState('white')
-const carStyle = ['white', 'add_plate', 'vin_registration']
-
-const renderButtons = carStyle => {
-  return carStyle.map( (color, index) => {
-    return ( <li key={index}
-      className={'color-selector ' + color}
-      onClick={() => setColor(color)}>
-    </li> )
-  })
-} */
-
-
-//FONCTIONS REGEX 
-/* const validatePlate = (plate = null) => {
-
-  if(!plate) {
-  return;
-
-} 
-  const regexImmatriculation = /^[A-Z]{2}-\d{3}-[A-Z]{2}$/;
-  return regexImmatriculation.test(plate) 
+  //REDIRECTION
+const leavePage = () => {
+  navigation.navigate('Welcome');
 }
 
-const validateCarRegistration = (car_registration = null) => {
-
-  if(!car_registration) {
-  return;
-  }
+//USE SELECTOR
+const user = useSelector((state) => state.user.value);
   
-  const regexCheckCarDocument = \b[(A-H|J-N|P|R-Z|0-9)]{17}\b; 
-  return regexCheckCarDocument.test(car_registration) && setColor(vin_registration)
-  
-}  */
+//STATE STYLE
+const [identification, setIdentification] = useState("")
+const [regexValidCar, setRegexValidCar] = useState(false)
+const [regexValidImma, setRegexValidImma] = useState(false)
 
-//FONCTION ADAPTE STYLE 
-/* 
-const renderButtons = carStyle => {
+//STATE OF INPUT 
+const [brand, setBrand] = useState('');
+const [year, setYear] = useState('');
+const [model, setModel] = useState('');
+const [motorization, setMotorization] = useState('');
 
-  if (validatePlate){
-    setColor(add_plate)
-  }
-  else if(validateCarRegistration){
-    setColor(vin_registration)
-  }
-}  */
+//STATE TOOLTIP
+const [toolTip, setToolTip] = useState(false);
 
-//FETCH LE BACK
+//USEEFFECT ADAPT STYLE
+useEffect(() => {
+  //REGEX 
+  const regexCheckCarDocument = /\b[(A-H|J-N|P|R-Z|0-9)]{17}\b/gm
+  const regexImmatriculation = /^[A-Z]{2}-\d{3}-[A-Z]{2}$/;
+  setRegexValidCar(regexCheckCarDocument.test(identification))
+  setRegexValidImma(regexImmatriculation.test(identification))
+}, [identification])
+
+/* //STATE DISPLAY OR HIDE INPUT
+const [color, setColor] = useState('white') */
 
 
+//FETCH BACKEND
+const handleSubmit = () => {
+   const testToken = "arXJRx5Vb1uqgpam6W5Y6g15MWxno91B"
+   console.log({token: testToken, licence_plate : regexValidImma ? identification : null, vin: regexValidCar ? identification : null, brand, infos:{purchase_Date: year}, model, motorization})
+  fetch(`${url_backend}/vehicles/add`, {
+    method: "POST", 
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({token: testToken, licence_plate : regexValidImma ? identification : null, vin: regexValidCar ? identification : null, brand, infos:{purchase_Date: year}, model, motorization})
+  }).then(response => response.json())
+  .then(data => {
+    console.log(data)
+    if(data.result){
+      dispatch(addVehicle (data._id));
+      navigation.navigate('Sign in') 
+    } 
+  })
+};
 
-//PHOTO DE PROFIL 
 
-  /*   return (
+return (
 
       <View style={styles.container}>
 
         <View style={styles.back}>
-          <Text style={styles.leave}>Retour</Text>
+          <TouchableOpacity onPress={() => leavePage()} >
+            <Text style={styles.leave} >Retour</Text> 
+        </TouchableOpacity>
         </View>
 
         <View style={styles.title}>
@@ -79,66 +78,75 @@ const renderButtons = carStyle => {
         </View>
 
         <View style={styles.byplate}>
-          <Text style={styles.searchbyplate}>Rechercher mon véhicule par plaque ou par carte grose</Text>
+          <Text style={styles.searchbyplate}>Rechercher mon véhicule par plaque ou par carte grise</Text>
         </View>
-
+        
           <View style={styles.add_plate}>
-            <View style={styles.view_theplate}>
-            <Text style={styles.letter_plate}>F</Text>
-            </View>
-            <View style={styles.view_input}>
-            <TextInput style={styles.input} placeholder="AA-455-BB" keyboardType="text" onChangeText={(value) => setPlate(value)} value={plate}/>
-            </View>
-            <View style={styles.view_theplate}>
-            </View>
-          </View>
 
+          {regexValidImma &&
+            <View style={styles.view_theplate}>
+           
+            <Text style={styles.letter_plate}>F</Text>
+            </View> }
+
+            <View style={styles.view_input}>
+              <TextInput style={styles.input} keyboardType="text" onChangeText={(e) => setIdentification(e)} value={identification}/>
+            </View>
+
+            {regexValidImma&&
+            <View style={styles.view_theplate}>
+            </View>
+            }
+          </View>
+           
+          {/* {regexValidCar &&
           <View style={styles.vin_registration}>
             <View style={styles.input_registration}>
-              <TextInput style={styles.input} placeholder="AA-455-BB" keyboardType="text" onChangeText={(value) => setCar_Registration(value)} value={car_registration}/>
+              <TextInput style={styles} keyboardType="text" onChangeText={() => informationCar()}/>
             </View>
-          </View>
-  
+          </View>} */}
 
-        <TouchableOpacity onPress={() => renderButtons()} style={styles.btn}  >
-        <Text style={styles.textbtn} >Ajouter mon véhicule</Text>
+        <TouchableOpacity style={styles.btn}  >
+        <Text style={styles.textbtn} >Ajouter mon véhicule</Text> 
         </TouchableOpacity>
-        
+
+        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Camera', {type: "vehicule"})}>
+        <Text style={styles.textbtn} >Photo de mon véhicule</Text> 
+        </TouchableOpacity>
 
         <View style={styles.toolTip}>
         <Tooltip
         isVisible={toolTip}
         content={
         <View style={styles.toolTipText}>
-          <Text>Saisissez le code national d'identification du type qui apparaît sur le champ D.2.1 de la carte grise.</Text>
-          <Image style={styles.image} source={require('../assets/vehicle_document.jpeg')} />
+          <Text style={styles.chcohcocho}>Saisissez le code national d'identification du type qui apparaît sur le champ D.2.1 de la carte grise.</Text>
           </View>
           }
           placement="top" onClose={() => setToolTip(false)}>
-           <TouchableOpacity onPress={() => setToolTip(true)}>
+           <TouchableOpacity onPress={() => setToolTip(true)} style={styles.toolHelp}>
               <Text>AIDE</Text>
             </TouchableOpacity>
             </Tooltip>
             </View>
-
-        <Text style={styles.title2}>LES INFORMATIONS DE MON VEHICULE</Text>
-
-        <View style={styles.form}>
-          <TextInput style={styles.addVin} placeholder="Marque" keyboardType="text"/>
-          <TextInput style={styles.addVin} placeholder="Année de mise en circulation" keyboardType="text"/>
-          <TextInput style={styles.addVin} placeholder="Modèle" keyboardType="text"/>
-          <TextInput style={styles.addVin} placeholder="Motorisation" keyboardType="text"/>
+            
+         
+          <View style={styles.form}>
+            <Text style={styles.title2}>LES INFORMATIONS DE MON VEHICULE</Text>
+          <TextInput style={styles.brand} placeholder="Marque" keyboardType="text" onChangeText={(value) => setBrand(value)} value={brand}/>
+          <TextInput style={styles.year} placeholder="Année de mise en circulation" keyboardType="text" onChangeText={(value) => setYear(value)} value={year}/>
+          <TextInput style={styles.model} placeholder="Modèle" keyboardType="text" onChangeText={(value) => setModel(value)} value={model}/>
+          <TextInput style={styles.motorization} placeholder="Motorisation" keyboardType="text" onChangeText={(value) => setMotorization(value)} value={motorization}/>
         </View>
 
-        <TouchableOpacity style={styles.buton}>
+        <TouchableOpacity style={styles.buton} onPress={handleSubmit}>
         <Text style={styles.textbtn}>Ajouter une première dépense</Text>
         </TouchableOpacity>
       </View>
     )
 } 
- export default AddVehicleScreen */
+ export default AddVehicleScreen
 
-  /* const styles = StyleSheet.create({
+  const styles = StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
@@ -228,7 +236,31 @@ const renderButtons = carStyle => {
     form: {
       padding: 10,
     },
-    addVin: {
+    brand: {
+      fontSize: 20,
+      marginBottom: 70, 
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#038737',
+      marginBottom: 16,
+    },
+    year:{
+      fontSize: 20,
+      marginBottom: 70, 
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#038737',
+      marginBottom: 16,
+    },
+    model: {
+      fontSize: 20,
+      marginBottom: 70, 
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#038737',
+      marginBottom: 16,
+    },
+    motorization: {
       fontSize: 20,
       marginBottom: 70, 
       padding: 10,
@@ -244,4 +276,15 @@ const renderButtons = carStyle => {
       paddingHorizontal: 12,
       width: 300,
     },
-  })  */
+    image: {
+      width: '100%',
+      height: '70%',
+    },
+    toolTip: {
+      flexDirection: 'row',
+
+    },
+    chcohcocho: {
+      textAlign: 'center',
+    }
+  }) 

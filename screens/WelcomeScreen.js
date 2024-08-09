@@ -17,6 +17,7 @@ const WelcomeScreen = ({ navigation }) => {
       <Image style={styles.image} source={require('../assets/favicon.png')} />
       </View>
       
+      
 
       {/* Button section */}
       <View>
@@ -24,8 +25,20 @@ const WelcomeScreen = ({ navigation }) => {
         <Text>INSCRIPTION</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Add Vehicle') }>
+      <TouchableOpacity onPress={() => navigation.navigate('Sign in') }>
         <Text>Se connecter</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('Add Vehicle') }>
+        <Text>Ajouter un véhicule</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('Add Fuel Exprense') }>
+        <Text>Ajouter une dépense [carburant]</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('Add Insurance Expense') }>
+        <Text>Ajouter une dépense [assurance]</Text>
       </TouchableOpacity>
 
       </View>

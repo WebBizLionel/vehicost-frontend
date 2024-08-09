@@ -25,7 +25,9 @@ const SigninScreen = ({ navigation }) => {
       !username ? setErrorUsername("L'email est requis") : setErrorUsername('');
       !password ? setErrorPassword('Le mot de passe est obligatoire') : password.length < 6 ? setErrorPassword('Mot de passe de plus de 6 caractere') : setErrorPassword('');
       if(data.result){
-        dispatch(addUsername({username,token: data.token}));
+        dispatch(addUsername({username,token: data.token}
+          
+        ));
         navigation.navigate('Add Vehicle');
       } 
     })

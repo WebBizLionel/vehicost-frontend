@@ -39,7 +39,7 @@ const handleSubmit = () => {
     !email ? setErrorEmail("L'email est requis") : setErrorEmail('');
     !password ? setErrorPassword('Le mot de passe est obligatoire') : password.length < 6 ? setErrorPassword('Mot de passe de plus de 6 caractere') : setErrorPassword('');
     if(data.result){
-      dispatch(addUsername({username,token}));
+      dispatch(addUsername({username, token: data.token}));
       navigation.navigate('Sign in')
     } 
   })
@@ -74,7 +74,7 @@ function handleBack() {
         <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
       <TextInput style={styles.input} placeholder="Email *" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
       <Text style={styles.error}>{errorEmail.length > 0 && errorEmail}</Text>
-       <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
+       <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true }  onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
        <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
        
        <PhoneInput onChangeText={(value) => setphoneNumber(value)}  
