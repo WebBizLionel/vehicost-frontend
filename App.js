@@ -11,6 +11,7 @@ import AddVehicleScreen from './screens/AddVehicleScreen'
 import AddFuelExpenseScreen from './screens/AddFuelExpenseScreen';
 import CameraScreen from './screens/CameraScreen';
 import AddInsuranceExpenseScreen from './screens/AddInsuranceExpenseScreen'
+import HomePageScreen from './screens/HomePageScreen'
 
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -65,6 +66,7 @@ export default function App() {
           <Stack.Screen name="Add Fuel Exprense" component={AddFuelExpenseScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
           <Stack.Screen name="Add Insurance Expense" component={AddInsuranceExpenseScreen} />
+          <Stack.Screen name="Acceuil" component={HomePageScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>

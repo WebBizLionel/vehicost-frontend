@@ -41,6 +41,10 @@ const WelcomeScreen = ({ navigation }) => {
         <Text>Ajouter une dépense [assurance]</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity onPress={() => navigation.navigate('Acceuil') }>
+        <Text>Acceuil</Text>
+      </TouchableOpacity>
+
       </View>
   
   

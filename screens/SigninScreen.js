@@ -12,7 +12,7 @@ const SigninScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const [errorUsername, setErrorUsername] = useState("");
-  const [errorPassword, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
 
   const handleSubmit = () => {
     console.log({username, password})
@@ -65,11 +65,20 @@ const SigninScreen = ({ navigation }) => {
       </View>
 
       <View>
+      <TouchableOpacity>
+        <Text>Se connecter avec Google</Text>
+      </TouchableOpacity>
+      </View>
+       {/*   https://www.youtube.com/watch?v=T-zTZn_xRBM */}
+     
+
+      <View>
       <TouchableOpacity onPress={() => handleSubmit()}>
         <Text>Se connecter</Text>
       </TouchableOpacity>
-
       </View>
+
+
     </View>
   )
 }
