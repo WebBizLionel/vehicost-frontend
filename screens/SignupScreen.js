@@ -5,12 +5,13 @@ import Checkbox from 'expo-checkbox';
 import { url_backend } from '../configuration/config';
 import { addUsername } from '../ reducers/user';
 import PhoneInput from 'react-native-international-phone-number';
+import { getLocales } from 'expo-localization';
 
 
 const SignupScreen = ({ navigation }) => {
 
-  //Dispatch : send actions to STORE 
-  const dispatch = useDispatch(); 
+//Dispatch : send actions to STORE 
+const dispatch = useDispatch(); 
 
 //STATES OF INPUTS
 const [username, setUsername] = useState("");
@@ -19,20 +20,22 @@ const [password, setPassword] = useState("");
 const [country, setCountry] = useState("");
 const [isChecked, setChecked] = useState(false);
 const [selectedCountry, setSelectedCountry] = useState(null);
-const [phoneNumber, setphoneNumber] = useState('');
+const [phone, setPhone] = useState("");
+const [deviceLanguage, setDeviceLanguage] = useState(getLocales()[0].languageCode);
+console.log(deviceLanguage)
 
 //STATE OF ERROR 
 const [errorUsername, setErrorUsername] = useState("");
 const [errorEmail, setErrorEmail] = useState("");
-const [errorPassword, setErrorPassword] = useState("");
+const [errorPassword,setErrorPassword] = useState("");
 
 // @TODO refactor with await
 const handleSubmit = () => {
-  console.log({username, email, password})
+
   fetch(`${url_backend}/users/signup`, {
     method: "POST", 
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({username, email, password})
+    body: JSON.stringify({username, email, password, phone, country, accept_rgpd: isChecked, preferences:{language: 'fr'}})
   }).then(response => response.json())
   .then(data => {
     !username ? setErrorUsername("Le nom d'utilisateur est requis") :  setErrorUsername('');
@@ -45,8 +48,8 @@ const handleSubmit = () => {
   })
 };
 
-function handlephoneNumber(phoneNumber) {
-  setphoneNumber(phoneNumber);
+function handlephoneNumber(phone) {
+  setPhone(phone);
 }
 
 function handleSelectedCountry(country) {
@@ -77,8 +80,8 @@ function handleBack() {
        <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true }  onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
        <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
        
-       <PhoneInput onChangeText={(value) => setphoneNumber(value)}  
-       value={phoneNumber}
+       <PhoneInput onChangeText={(value) => setPhone(value) }  
+       value={phone}
         onChangePhoneNumber={handlephoneNumber}
         selectedCountry={selectedCountry}
         onChangeSelectedCountry={handleSelectedCountry}

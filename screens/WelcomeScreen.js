@@ -1,7 +1,18 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Linking, Button} from 'react-native'
 import React from 'react'; 
 
 const WelcomeScreen = ({ navigation }) => {
+
+    const message = "Bonjour le support !  ❤️ "
+
+  const openUrl = async (url) => {
+    const isSupported = await Linking.canOpenURL(url);
+    if (isSupported) {
+        await Linking.openURL(url);
+    } else {
+        Alert.alert(`Don't know how to open this url: ${url}`);
+    }
+}
 
   return (
     
@@ -41,13 +52,19 @@ const WelcomeScreen = ({ navigation }) => {
         <Text>Ajouter une dépense [assurance]</Text>
       </TouchableOpacity>
 
+
       <TouchableOpacity onPress={() => navigation.navigate('Acceuil') }>
-        <Text>Acceuil</Text>
+        <Text>Profil</Text>
       </TouchableOpacity>
 
+      <View style={styles.buttonContainer}>
+                <Button title="Contacter le support" onPress={() => {
+                    Linking.openURL(`mailto:support@vehicost.com?subject=Contacter le support VehiCost&body=${message}`)
+                }} />
+            </View>
+
       </View>
-  
-  
+
 
     </View>
   )

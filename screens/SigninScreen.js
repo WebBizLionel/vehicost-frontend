@@ -4,7 +4,12 @@ import { useDispatch } from 'react-redux';
 import { url_backend } from '../configuration/config';
 import { addUsername } from '../ reducers/user';
 
+
 const SigninScreen = ({ navigation }) => {
+
+  const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
+
 
   const dispatch = useDispatch(); 
 
@@ -64,11 +69,7 @@ const SigninScreen = ({ navigation }) => {
        <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
       </View>
 
-      <View>
-      <TouchableOpacity>
-        <Text>Se connecter avec Google</Text>
-      </TouchableOpacity>
-      </View>
+     
        {/*   https://www.youtube.com/watch?v=T-zTZn_xRBM */}
      
 

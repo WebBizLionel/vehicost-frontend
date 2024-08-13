@@ -1,11 +1,17 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, TouchableHighlight, Input} from 'react-native';;
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, SafeAreaView, KeyboardAvoidingView,Platform, Alert} from 'react-native';;
 import React, { useState, useEffect, useRef } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
-import DateTimePicker from 'react-native-ui-datepicker';
-import dayjs from 'dayjs';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
+import { url_backend } from '../configuration/config';
+import { useSelector } from 'react-redux';
+import Dropdown from 'react-native-input-select';
 
 
 const AddFuelExpenseScreen = ({ navigation }) => {
+
+  const user = useSelector((state) => state.user.value);
+
 
 //STATE OF INPUT 
  const [liter, setLiter] = useState('');
@@ -14,16 +20,34 @@ const AddFuelExpenseScreen = ({ navigation }) => {
  const [location, setLocation] = useState('');
  const [comment, setComment] = useState('');
 
- 
+
  //DATE 
- const [date, setDate] = useState(dayjs());
+ const [date, setDate] = useState(new Date());
+ const [inputDate, setInputDate] = useState(moment().local().format("DD-MM-YYYY"))
+ const [show, setShow] = useState(false);
+ const [mode, setMode] = useState('date');
 
 
+const [thevehicle, setTheVehicle] = useState([]);
+const [selectedVehicle, setSelectedVehicle] = useState("")
+/* console.log("selectedVehicle =>", selectedVehicle); */
+
+
+
+ const handleDate = (e, selectedDate) => {
+    setDate(selectedDate);
+    setInputDate(moment(selectedDate).local().format("DD-MM-YYYY"))
+    setShow(false);
+ };
+
+ const showMode = (modeToShow) => {
+    setShow(true);
+    setMode(modeToShow);
+ }
 
  const leavePage = () => {
     navigation.navigate('Welcome');
   }
-
 
  //IMPORT DOCUMENT :
 
@@ -33,38 +57,73 @@ _pickDocument = async () => {
     
     alert(result.assets[0]);
     
-    console.log(result);
+    // console.log(result);
     
 }
 
+const photoUri =  user.pic[0];
+const formData = new FormData();
+
+if(photoUri) {
+  // console.log({coucou: photoUri});
+
+  formData.append('fileUpload', {
+    uri:photoUri, 
+    name:'receiptPhoto', 
+    type:'image/jpeg',
+  }); 
+}
+
+const category = "carburant"; 
+const expenses = { liter, price, location, comment, category }
+
+formData.append('vehicle_id',selectedVehicle);
+formData.append('liter', liter);
+formData.append('amount', price);
+formData.append('location', location);
+formData.append('comment', comment);
+formData.append('category', category);
+
 //FETCH BACKEND
 const handleSubmit = () => {
-    const testToken = "arXJRx5Vb1uqgpam6W5Y6g15MWxno91B"
-    console.log({token: testToken, infos:{purchase_Date: year},})
-   fetch(`${url_backend}/expenses/add`, {
-     method: "POST", 
-     headers: {"Content-Type": "application/json"},
-     body: JSON.stringify({token: testToken, expenses:{receipt}, expenses:{liters: liter}, expenses:{amount: price},  expenses:{place: location},  expenses:{note: comment}})
-   }).then(response => response.json())
-   .then(data => {
-     console.log(data)
-     if(data.result){
-       navigation.navigate('Welcome') 
-     } 
-   })
+fetch(`${url_backend}/vehicles/expenses/add`,{
+    method: "POST",
+    headers: {Authorization: `Bearer ${user.token}`, "Content-Type": "application/json"},
+    body: formData,
+  }).then(res => res.json())
+    .then(data => {
+      if(data.result){
+       Alert.alert("Succès", "Dépense ajoutée avec succès !") 
+      }else {
+        Alert.alert("Erreur", data.error)        
+      }
+    }) 
  };
+
+ //FETCH VEHICLE 
+  useEffect(() => {  
+    fetch(`${url_backend}/vehicles/get`, {
+      headers: {Authorization: `Bearer ${user.token}`, "Content-Type": "application/json"},
+    })  
+      .then(response => response.json())  
+       .then(data => {  
+          setTheVehicle(data.vehicles);  
+       });  
+   }, []); 
  
 
   return (
     
-<View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+          <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
 
-
-<View style={styles.back}>
+  <ScrollView style={styles.scrollView}>
           <TouchableOpacity onPress={() => leavePage()} >
             <Text style={styles.leave} >Retour</Text> 
         </TouchableOpacity>
-        </View>
+        
 
            {/* TITLE*/}
         <View style={styles.title}>
@@ -72,62 +131,78 @@ const handleSubmit = () => {
         </View>
 
 
-
-        {/* DROPDOWN BUTTON IF THE USER HAVE MORE THAN 1 VEHICLE*/}
-
-
-          {/*  ADD PHOTO*/}
-        <View style={styles.addreceipt}>
+               {/*  -----------------ADD PHOTO-------------------------------*/}
+               <View style={styles.addreceipt}>
             <TouchableOpacity onPress={() => navigation.navigate('Camera', {type: "receipt", redirection:'Add Fuel Exprense'})}  >
                 <Text style={styles.receipt} >Ajouter un reçu</Text>
             </TouchableOpacity>
         </View>
 
+        
 
-        {/*  UPLOAD*/}
-           <View style={styles.addupload}>
+        <Dropdown
+      label="Vehicle"
+      placeholder="Choisir le vehicule"
+      options={thevehicle?.map((e) => {return {label: e.name, value: e._id}})}
+      selectedValue={selectedVehicle}
+      onValueChange={(value) => setSelectedVehicle(value)}
+      primaryColor={'green'}/>
+
+                {/*  -----------------UPLOAD -------------------------------*/}
+                <View style={styles.addupload}>
             <TouchableOpacity onPress={this._pickDocument} >
                 <Text style={styles.theupload} > Joindre un fichier</Text>
             </TouchableOpacity>
         </View> 
 
-        <DateTimePicker
-        locale='fr'
-        mode="single"
-        date={date}
-        onChange={(params) => setDate(params.date)}
-      />
 
+               {/*  -----------------DATE -------------------------------*/}
+        <View>
+        <TextInput onPress= {() => showMode("date")} title="DATE" color="#841584"  placeholder='dd/mm/yyyy' value={inputDate} />
+          {
+            show && (
+              <DateTimePicker
+              value = {date}
+              locale= {'fr'}
+              mode={mode}
+              display={"date"}
+              is24Hour={true}
+              onChange={handleDate}
+              />
+            )
+          }
+        </View>
+
+  {/*  -----------------LITTRE-------------------------------*/}
         <View style={styles.addliter}>
-            <TextInput style={styles.liter} placeholder="5L" keyboardType="numeric" onChangeText={(value) => setLiter(value)} value={liter}/>
+        <TextInput style={styles.price} placeholder="Nombre de littre" keyboardType="numeric" onChangeText={(value) => setLiter(value)} value={liter}/>
         </View>        
 
           {/*  ADD PRICE*/}
         <View style={styles.addprice}>
             <TextInput style={styles.price} placeholder="50 €" keyboardType="numeric" onChangeText={(value) => setPrice(value)} value={price}/>
-            <Text>Prix total et non unitaire</Text>   
         </View>
 
         {/*  ADD LOCATION*/}
         <View style={styles.addadress}>
-            <TextInput style={styles.location} placeholder="50 €" keyboardType="numeric" onChangeText={(value) => setLocation(value)} value={location}/>
+            <TextInput style={styles.location} placeholder="Adresse" onChangeText={(value) => setLocation(value)} value={location}/>
         </View>
 
         {/*  ADD COMMENT*/}
-            <View style={styles.addcomment}>
-                <TextInput style={styles.note} placeholder="50 €" keyboardType="numeric" onChangeText={(value) => setComment(value)} value={comment}/>
-                    <Text>Prix total</Text>  
-            </View>
+        <View style={styles.addadress}>
+            <TextInput style={styles.location} placeholder="Note" onChangeText={(value) => setComment(value)} value={comment}/>
+        </View>
 
 
-        {/*  ADD COMMENT*/}
         <View style={styles.btnaddexpense}>
         <TouchableOpacity onPress={() => handleSubmit()}>
             <Text style={styles.addexpense}>Ajouter cette dépense</Text> 
         </TouchableOpacity>
         </View>
 
-     </View>
+        </ScrollView>
+        </KeyboardAvoidingView>
+        </SafeAreaView>
   )
 }
 
@@ -138,19 +213,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   baseText: {
     fontSize: 25,
   }, 
   addpicture: {
-
+    padding: 34,
   },
   thetitle: {
     fontSize: 25,
+    padding: 34,
   },
   camera: {
     flex: 1,
+    padding: 34,
     
   },
   snapContainer: {
@@ -158,11 +235,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     paddingBottom: 25,
+    padding: 34,
   },
   theupload: {
     fontSize: 25,
     color: 'black',
+    padding: 34,
+  },
+  addliter: {
+    padding: 34,
+  },
+  location: {
+    padding: 34,
   }
-
 })
 

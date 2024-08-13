@@ -36,10 +36,9 @@ export default function CameraScreen({route , navigation: {goBack}}) {
         
 		const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
 		if (photo) {
-           /*  console.log(photo); */
 			const uri = photo.uri;
 			dispatch(addPhoto(uri));
-            //props.uri 
+            goBack();
 		}
 	};
 

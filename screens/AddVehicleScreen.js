@@ -27,6 +27,7 @@ const [brand, setBrand] = useState('');
 const [year, setYear] = useState('');
 const [model, setModel] = useState('');
 const [motorization, setMotorization] = useState('');
+const [image, setImage] = useState('');
 
 //STATE TOOLTIP
 const [toolTip, setToolTip] = useState(false);
@@ -34,33 +35,62 @@ const [toolTip, setToolTip] = useState(false);
 //USEEFFECT ADAPT STYLE
 useEffect(() => {
   //REGEX 
-  const regexCheckCarDocument = /\b[(A-H|J-N|P|R-Z|0-9)]{17}\b/gm
+  const regexCheckCarDocument = /^[A-HJ-NPR-Z0-9]{17}$/;
   const regexImmatriculation = /^[A-Z]{2}-\d{3}-[A-Z]{2}$/;
   setRegexValidCar(regexCheckCarDocument.test(identification))
   setRegexValidImma(regexImmatriculation.test(identification))
+
 }, [identification])
+
+
 
 /* //STATE DISPLAY OR HIDE INPUT
 const [color, setColor] = useState('white') */
 
+// console.log(user);
+
+
 
 //FETCH BACKEND
 const handleSubmit = () => {
-   const testToken = "arXJRx5Vb1uqgpam6W5Y6g15MWxno91B"
-   console.log({token: testToken, licence_plate : regexValidImma ? identification : null, vin: regexValidCar ? identification : null, brand, infos:{purchase_Date: year}, model, motorization})
-  fetch(`${url_backend}/vehicles/add`, {
-    method: "POST", 
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({token: testToken, licence_plate : regexValidImma ? identification : null, vin: regexValidCar ? identification : null, brand, infos:{purchase_Date: year}, model, motorization})
-  }).then(response => response.json())
-  .then(data => {
-    console.log(data)
-    if(data.result){
-      dispatch(addVehicle (data._id));
-      navigation.navigate('Sign in') 
-    } 
-  })
+
+  let plaqueVin = null; 
+
+  if (regexValidImma) {
+    plaqueVin = {licence_plate: identification}
+  } else if (regexValidCar) {
+    plaqueVin = {vin: identification}
+  }
+
+  // file
+  const photoUri =  user.photos[0];
+  const formData = new FormData();
+
+  if(photoUri) {
+    console.log({coucou: photoUri});
+
+    formData.append('fileUpload', {
+      uri:photoUri, 
+      name:'vehiclePhoto', 
+      type:'image/jpeg',
+    }); 
+  }
+  
+  const datas = {...plaqueVin, brand, year, model, motorization }; 
+
+  for (const data in datas) {
+    formData.append(data, datas[data])
+  }
+
+  fetch(`${url_backend}/vehicles/add`,{
+    method: "POST",
+    headers: {Authorization: `Bearer ${user.token}`},
+    body:formData,
+  }).then(res=>res.json()).then(json=> console.log(JSON.stringify(json))) 
+  navigation.navigate('Add Fuel Exprense')
 };
+
+
 
 
 return (
@@ -90,7 +120,7 @@ return (
             </View> }
 
             <View style={styles.view_input}>
-              <TextInput style={styles.input} keyboardType="text" onChangeText={(e) => setIdentification(e)} value={identification}/>
+              <TextInput style={styles.input} keyboardType="text" placeholder="AA-123-BB" onChangeText={(e) => setIdentification(e.toUpperCase())} value={identification} />
             </View>
 
             {regexValidImma&&
@@ -98,17 +128,7 @@ return (
             </View>
             }
           </View>
-           
-          {/* {regexValidCar &&
-          <View style={styles.vin_registration}>
-            <View style={styles.input_registration}>
-              <TextInput style={styles} keyboardType="text" onChangeText={() => informationCar()}/>
-            </View>
-          </View>} */}
-
-        <TouchableOpacity style={styles.btn}  >
-        <Text style={styles.textbtn} >Ajouter mon véhicule</Text> 
-        </TouchableOpacity>
+          
 
         <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Camera', {type: "vehicule"})}>
         <Text style={styles.textbtn} >Photo de mon véhicule</Text> 
@@ -138,9 +158,10 @@ return (
           <TextInput style={styles.motorization} placeholder="Motorisation" keyboardType="text" onChangeText={(value) => setMotorization(value)} value={motorization}/>
         </View>
 
-        <TouchableOpacity style={styles.buton} onPress={handleSubmit}>
-        <Text style={styles.textbtn}>Ajouter une première dépense</Text>
+        <TouchableOpacity style={styles.btn} onPress={()=> handleSubmit() }  >
+        <Text style={styles.textbtn} >Ajouter mon véhicule</Text> 
         </TouchableOpacity>
+
       </View>
     )
 } 
@@ -157,13 +178,13 @@ return (
     },
     thetitle: {
       color: '#000000',
-      fontSize: '25',
+      fontSize: 25,
     },
     search_vehicle: {
       padding: 20,
     },
     addsearch: {
-      fontSize: '18',
+      fontSize: 18,
       fontWeight: 'bold',
     },
     byplate: {
@@ -192,7 +213,7 @@ return (
     letter_plate: {
       color: '#ffffff',
       textAlign: 'center',
-      fontSize: '20',
+      fontSize: 20,
       marginTop: 6,
     },
     searchbymodel: {
@@ -224,12 +245,12 @@ return (
       textAlign: 'center',
     },
     choice: {
-      fontSize: '18',
+      fontSize: 18,
       fontWeight: 'bold',
       padding: 30,
     },
     title2: {
-      fontSize: '16',
+      fontSize: 16,
       fontWeight: 'bold',
       padding: 40,
     },

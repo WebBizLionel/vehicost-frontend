@@ -21,8 +21,6 @@ export const userSlice = createSlice({
         addVehicle: (state, action) => {  
             state.value.push(action.payload); 
     },
-
-
         addPhoto: (state, action) => {  
         state.value.photos.push(action.payload);
         console.log(action.payload);
