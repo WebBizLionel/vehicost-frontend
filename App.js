@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,6 +17,13 @@ import HomePageScreen from './screens/HomePageScreen'
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './ reducers/user';
+
+//Fonts
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen'; 
+import { fontStyles } from './styles/fontsStyle';
+
+// style
 
 const store = configureStore ({
   reducer: { user }
@@ -55,6 +63,23 @@ const TabNavigator = () => {
 
 
 export default function App() {
+
+  //fonts
+  const [loaded, error] = useFonts(fontStyles);
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+
+
+
+
   return (
     <Provider store={store}>
        <NavigationContainer>

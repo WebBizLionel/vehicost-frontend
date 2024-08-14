@@ -9,9 +9,6 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
-    "@fortawesome/react-native-fontawesome": "^0.3.2",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-google-signin/google-signin": "^12.2.1",
     "@react-native-picker/picker": "2.7.5",
@@ -24,6 +21,8 @@
     "expo-checkbox": "~3.0.0",
     "expo-datepicker": "^1.0.23",
     "expo-document-picker": "~12.0.2",
+    "expo-font": "~12.0.9",
+    "expo-splash-screen": "~0.27.5",
     "expo-localization": "^15.0.3",
     "expo-status-bar": "~1.12.1",
     "i": "^0.3.7",

@@ -1,72 +1,37 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Linking, Button} from 'react-native'
-import React from 'react'; 
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  TouchableOpacity, 
+  Image
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { Fragment } from 'react'; 
+import Simplelinking from '../components/simpleLinking';
+import SimpleButton from '../components/simpleButton';
+import {global} from '../styles/style';
+import { diMension, gColor, stepSize } from '../styles/variablesCSS';
 
 const WelcomeScreen = ({ navigation }) => {
 
-    const message = "Bonjour le support !  ❤️ "
-
-  const openUrl = async (url) => {
-    const isSupported = await Linking.canOpenURL(url);
-    if (isSupported) {
-        await Linking.openURL(url);
-    } else {
-        Alert.alert(`Don't know how to open this url: ${url}`);
-    }
-}
-
   return (
-    
-    <View style={styles.container}>
-      {/* Title */}
-
-      <View>
-      <Text style={styles.baseText}>Bienvenue sur VehiCost</Text>
-      </View>
-
-      {/* Carrousel */}
-      <View>
-      <Image style={styles.image} source={require('../assets/favicon.png')} />
-      </View>
-      
-      
-
-      {/* Button section */}
-      <View>
-      <TouchableOpacity onPress={() => navigation.navigate('Sign Up') }>
-        <Text>INSCRIPTION</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate('Sign in') }>
-        <Text>Se connecter</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate('Add Vehicle') }>
-        <Text>Ajouter un véhicule</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate('Add Fuel Exprense') }>
-        <Text>Ajouter une dépense [carburant]</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate('Add Insurance Expense') }>
-        <Text>Ajouter une dépense [assurance]</Text>
-      </TouchableOpacity>
-
-
-      <TouchableOpacity onPress={() => navigation.navigate('Acceuil') }>
-        <Text>Profil</Text>
-      </TouchableOpacity>
-
-      <View style={styles.buttonContainer}>
-                <Button title="Contacter le support" onPress={() => {
-                    Linking.openURL(`mailto:support@vehicost.com?subject=Contacter le support VehiCost&body=${message}`)
-                }} />
-            </View>
+    <Fragment>
+    <SafeAreaView style={global.mainContainer}>
+      <View style={{...global.w100, ...styles.topScreen}}>
 
       </View>
-
-
-    </View>
+      <View style={{...global.w100, ...styles.bottomScreen}}>
+        <View style={{...global.mainWrapper, ...styles.bottomWrapper}}>
+          <View>
+            <SimpleButton callback={handlePress = () => navigation.navigate('Sign Up')}/>
+          </View>
+          <View style={styles.contactLink}>
+            <Simplelinking style={{...global.link, ...global.textRight}} hoverStyle={{...global.linkPressed,...global.textRight}} url='mailto:support@vehicost.com?subject=Contacter le support VehiCost&body=Bonjour le support !  ❤️' text='Contacter le support'/>
+          </View>
+        </View>
+      </View>
+    </SafeAreaView>
+    </Fragment>
   )
 }
 
@@ -79,10 +44,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  baseText: {
-    fontSize: 25,
+  topScreen:{
+    height:diMension.d_60,
+    backgroundColor:gColor.bgColor2,
+  },
+  bottomScreen:{
+    height:diMension.d_40,
   }, 
-
-
+  bottomWrapper:{
+     paddingTop:5*stepSize,
+     flexDirection:'column',
+     justifyContent:'space-between',
+     height:diMension.d_12_12, 
+  },
+  contactLink:{
+    paddingBottom:2*stepSize,
+  },
+ 
+  
 })
 
