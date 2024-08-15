@@ -26,11 +26,12 @@ const global = {
     link:{
         color:gColor.mainColor,
         fontSize:textSize.textBody,
-       
+       fontFamily:'SourceSansPro-Regular'
     },
     linkPressed:{
         color:gColor.additionalColor,
-        fontSize:textSize.textBody
+        fontSize:textSize.textBody,
+        fontFamily:'SourceSansPro-Regular',
     },  
     button:{
         backgroundColor:gColor.mainColor,
@@ -51,9 +52,18 @@ const global = {
     },
     ghostbutton:{
 
+    },
+    defaultText:{
+        fontSize:textSize.textBody,
+        color:gColor.textColor,
+        fontFamily:'SourceSansPro-Regular', 
+        lineHeight: 100, 
+    }, 
+    defaultH6:{
+        fontSize:textSize.subTitle,
+        fontFamily:'Montserrat-Regular',
+        color:gColor.textColor,
     }
 }
-
-
 
 module.exports = {global}; 

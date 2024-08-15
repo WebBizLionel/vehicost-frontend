@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
 
 import WelcomeScreen from './screens/WelcomeScreen';
 import SigninScreen from './screens/SigninScreen';
@@ -29,11 +31,9 @@ const store = configureStore ({
   reducer: { user }
 });
 
-
-
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
-
 
 /* @TODO make bottomtab */
 const TabNavigator = () => {
@@ -76,9 +76,6 @@ export default function App() {
   if (!loaded && !error) {
     return null;
   }
-
-
-
 
   return (
     <Provider store={store}>

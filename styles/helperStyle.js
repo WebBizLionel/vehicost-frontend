@@ -13,6 +13,9 @@ const helpers = {
     textBody:{
         fontSize:textSize.textBody,
     },
+    textSubtitle:{
+        fontSize:textSize.subTitle, 
+    },
     textColor:{
         color:gColor.textColor, 
     }, 
@@ -25,6 +28,12 @@ const helpers = {
     },
     w100:{
         width:diMension.d_12_12
+    }, 
+    jcEnd:{
+        justifyContent:'flex-end', 
+    },
+    MontserratRegular:{
+        fontFamily:'Montserrat-Regular'
     }
 }
 

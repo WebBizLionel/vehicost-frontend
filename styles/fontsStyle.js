@@ -11,4 +11,12 @@ export const fontStyles = {
      'SourceSansPro-LightItalic': require('../assets/fonts/source-sans-pro/SourceSansPro-LightItalic.ttf'),
      'SourceSansPro-Semibold': require('../assets/fonts/source-sans-pro/SourceSansPro-Semibold.ttf'),
      'SourceSansPro-SemiboldItalic': require('../assets/fonts/source-sans-pro/SourceSansPro-SemiboldItalic.ttf'),
+     'Montserrat-Black':require('../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
+     'Montserrat-BlackItalic': require('../assets/fonts/Montserrat/static/Montserrat-BlackItalic.ttf'),
+     'Montserrat-Bold':require('../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'), 
+     'Montserrat-BoldItalic':require('../assets/fonts/Montserrat/static/Montserrat-BoldItalic.ttf'),
+     'Montserrat-Medium':require('../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'), 
+     'Montserrat-MediumItalic':require('../assets/fonts/Montserrat/static/Montserrat-MediumItalic.ttf'), 
+     'Montserrat-Regular':require('../assets/fonts/Montserrat/static/Montserrat-Regular.ttf'),
+     'Montserrat-SemiBold':require('../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
 }
