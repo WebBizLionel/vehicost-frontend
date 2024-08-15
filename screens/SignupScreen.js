@@ -28,7 +28,6 @@ const selectCountry = (country) => {
   setCountry(country);
 };
 
-
 const [selectedCountry, setSelectedCountry] = useState(null);
 
 const [phone, setPhone] = useState("");
@@ -40,10 +39,10 @@ const [deviceLanguage, setDeviceLanguage] = useState(getLocales()[0].languageCod
 const [errorUsername, setErrorUsername] = useState("");
 const [errorEmail, setErrorEmail] = useState("");
 const [errorPassword,setErrorPassword] = useState("");
-const [errorIsChecked,setErrorIsChecked] = useState(false);
+const [errorIsChecked,setErrorIsChecked] = useState("");
 
 //MODAL 
-const [isModalVisible, setModalVisible] = useState(true)
+const [isModalVisible, setModalVisible] = useState(false)
 
 const toggleModal = () => {
   setModalVisible(!isModalVisible)
@@ -60,10 +59,10 @@ const handleSubmit = () => {
     body: JSON.stringify({username, email, password, phone, country, accept_rgpd: isChecked, preferences:{language: deviceLanguage}})
   }).then(response => response.json())
   .then(data => {
-    !username ? setErrorUsername("Le nom d'utilisateur est requis") :  setErrorUsername('');
+    !username ? setErrorUsername("Le nom d'utilisateur est requis") : setErrorUsername('');
     !email ? setErrorEmail("L'email est requis") : setErrorEmail('');
     !password ? setErrorPassword('Le mot de passe est obligatoire') : password.length < 6 ? setErrorPassword('Mot de passe de plus de 6 caractere') : setErrorPassword('');
-    !isChecked ? setErrorIsChecked("Vous n'avez pas accepté les conditions générales de Véhicost") : setErrorIsChecked('');
+    !isChecked ? setErrorIsChecked("Vous n'avez pas accepté les conditions générales de Vehicost") : setErrorIsChecked('');
     if(data.result){
       dispatch(addUsername({username, token: data.token}));
       navigation.navigate('Sign in')
@@ -82,10 +81,8 @@ function handleSelectedCountry(country) {
 function handleBack() {
   navigation.navigate('Welcome');
 }
-
-const vehicostText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-
-  return (
+console.log(errorIsChecked )
+return (
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={styles.container}>
 
         <View style={styles.backpage}>
@@ -100,12 +97,18 @@ const vehicostText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, s
 
     
       <View style={styles.field} >
-      <TextInput style={styles.input} placeholder="Nom d'utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username}  type="text" id="username"/>
-        <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
-      <TextInput style={styles.input} placeholder="Email *" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
-      <Text style={styles.error}>{errorEmail.length > 0 && errorEmail}</Text>
-       <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true }  onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
-       <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
+        <View style={styles.inputusername}>
+          <TextInput style={styles.input} placeholder="Nom d'utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username}  type="text" id="username"/>
+          <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
+        </View>
+        <View style={styles.inputemail}>
+          <TextInput style={styles.input} placeholder="Email *" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
+          <Text style={styles.error}>{errorEmail.length > 0 && errorEmail}</Text>
+        </View>
+        <View style={styles.inputpassword}>
+          <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true }  onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
+          <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
+       </View>
        
        <PhoneInput onChangeText={(value) => setPhone(value) }  
        value={phone}
@@ -119,19 +122,27 @@ const vehicostText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, s
         placeholder='Téléphone' 
         customCarret={'<></>'}/>
 
-        <DropdownCountriesButton country={country} selectCountry={selectCountry} setCountry={setCountry}/>
+      <View style={styles.selectcountry}>
+      <DropdownCountriesButton country={country} selectCountry={selectCountry} setCountry={setCountry} />
+      </View>
 
       <View style={styles.acceptcondition} >
-      <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
       <Modal style={styles.bottomModalView} isVisible={isModalVisible} backdropOpacity={0} onBackdropPress={toggleModal}>
         <View style={styles.modal}>
           <Text style={styles.modalText}>{condition}</Text>
-          
         </View>
       </Modal>
-      <TouchableHighlight style={styles.button} onPress={toggleModal}>
-        <Text style={styles.buttonText}>J'accepte les conditions générales de VéhiCost </Text>
-      </TouchableHighlight>
+
+      <View style ={styles.firstvalidation}>
+        <View style={styles.combinaison}>
+          <Checkbox style={styles.checkbox} value={isChecked} onValueChange={e => setChecked(!isChecked)} />
+            <TouchableHighlight style={styles.button} onPress={toggleModal}>
+              <Text style={styles.buttonText}>J'accepte les conditions générales de VéhiCost</Text>
+            </TouchableHighlight>
+        </View>
+        <Text style={styles.errorCheck}>{errorIsChecked && errorIsChecked}</Text>
+      </View>
+
       </View>
  
 
@@ -180,7 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginBottom: 30, 
   }, 
-  input: {
+  inputusername: {
     fontSize: 20,
     marginBottom: 70, 
     padding: 10,
@@ -188,6 +199,23 @@ const styles = StyleSheet.create({
     borderColor: '#038737',
     marginBottom: 16,
 
+  },
+  inputemail: {
+    fontSize: 20,
+    marginBottom: 70, 
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginBottom: 16,
+
+  },
+  inputpassword: {
+    fontSize: 20,
+    marginBottom: 70, 
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginBottom: 16,
   },
   btn: {
     marginTop: 30,
@@ -208,6 +236,7 @@ const styles = StyleSheet.create({
   error: {
     color:'red',
     fontSize: 12,
+
   },
   acceptcondition: {
     flexDirection: 'row',
@@ -242,7 +271,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonText: {
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   modal: {
     width: "100%",
@@ -257,5 +286,18 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'left',
     margin: 10,
+  },
+  selectcountry: {
+    marginTop: 15,
+  },
+  combinaison: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  errorCheck: {
+    color:'red',
+    fontSize: 12,
+    alignItems: 'center',
+    paddingHorizontal:30,
   }
 })
