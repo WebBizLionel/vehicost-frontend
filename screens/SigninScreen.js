@@ -1,12 +1,13 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity} from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert} from 'react-native'
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { url_backend } from '../configuration/config';
 import { addUsername } from '../ reducers/user';
+import MaterialTextField from '../components/materialTextField';
 
 
 const SigninScreen = ({ navigation }) => {
-
+  const [name, setName] = useState('');
   const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
@@ -20,21 +21,23 @@ const SigninScreen = ({ navigation }) => {
   const [errorPassword, setErrorPassword] = useState("");
 
   const handleSubmit = () => {
-    console.log({username, password})
     fetch(`${url_backend}/users/signin`, {
       method: "POST", 
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({username, password})
     }).then(response => response.json())
-    .then(data => {
+    .then(data => { 
       !username ? setErrorUsername("L'email est requis") : setErrorUsername('');
       !password ? setErrorPassword('Le mot de passe est obligatoire') : password.length < 6 ? setErrorPassword('Mot de passe de plus de 6 caractere') : setErrorPassword('');
       if(data.result){
-        dispatch(addUsername({username,token: data.token}
-          
-        ));
-        navigation.navigate('Add Vehicle');
-      } 
+        navigation.navigate('Ajouter un vehicule');
+        dispatch(addUsername({username,token: data.token})); 
+      }else{
+        Alert.alert('', data.error, [
+         
+          {text: 'OK', onPress: () => {setPassword(''), setUsername(''), setErrorPassword(''), setErrorUsername('')}},
+        ]);
+      }
     })
   
   };
@@ -46,7 +49,7 @@ const SigninScreen = ({ navigation }) => {
   return (
 
     <View style={styles.container}>
-      
+
       <View>
       <Text style={styles.baseText}>Bienvenue sur VehiCost</Text>
       </View>
@@ -77,6 +80,7 @@ const SigninScreen = ({ navigation }) => {
       <TouchableOpacity onPress={() => handleSubmit()}>
         <Text>Se connecter</Text>
       </TouchableOpacity>
+
       </View>
 
 

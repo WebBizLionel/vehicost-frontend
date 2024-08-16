@@ -27,7 +27,7 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={{...global.w100, ...styles.bottomScreen}}>
         <View style={{...global.mainWrapper, ...styles.bottomWrapper}}>
           <View>
-            <SimpleButton callback={handlePress = () => navigation.navigate('Sign Up')}/>
+            <SimpleButton textButton={'Inscription'} callback={handlePress = () => navigation.navigate('Sign Up')} />
             <Text style={{...global.defaultH6,...global.textCenter, ...styles.signIntext}}>Vous avez déjà un compte ?</Text> 
             <SimpleLink text={'Se connecter'} txtstyle={{...styles.signInLink,...global.textCenter, ...global.textLink}} callback={() => navigation.navigate('Sign in')} txtColor={gColor.mainColor} txtHoverColor={gColor.additionalColor}/>
           </View>
@@ -42,7 +42,6 @@ const WelcomeScreen = ({ navigation }) => {
 }
 
 export default WelcomeScreen
-
 
 const styles = StyleSheet.create({
   container: {

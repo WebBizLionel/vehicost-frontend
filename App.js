@@ -82,7 +82,7 @@ export default function App() {
        <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Add Vehicle" component={AddVehicleScreen} />
+          <Stack.Screen name="Ajouter un vehicule" component={AddVehicleScreen} />
           <Stack.Screen name="Sign Up" component={SignupScreen} />
           <Stack.Screen name="Sign in" component={SigninScreen} />
           <Stack.Screen name="Add Fuel Exprense" component={AddFuelExpenseScreen} />

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Pressable,Dimensions, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, TouchableHighlight, Pressable,SafeAreaView } from 'react-native';
 import Modal from "react-native-modal";
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -8,7 +8,9 @@ import { addUsername } from '../ reducers/user';
 import PhoneInput from 'react-native-international-phone-number';
 import { getLocales } from 'expo-localization';
 import DropdownCountriesButton from '../components/dropdownCountriesButton';
-
+import { global } from '../styles/style';
+import SimpleButton from '../components/simpleButton';
+import { gColor, stepSize } from '../styles/variablesCSS';
 
 const SignupScreen = ({ navigation, ...props}) => {
 
@@ -32,7 +34,7 @@ const [selectedCountry, setSelectedCountry] = useState(null);
 
 const [phone, setPhone] = useState("");
 const [deviceLanguage, setDeviceLanguage] = useState(getLocales()[0].languageCode);
-/* console.log(deviceLanguage) */
+/*console.log(deviceLanguage)*/
 
 
 //STATE OF ERROR 
@@ -52,11 +54,11 @@ const condition = "Lorem ipsum dolor sit amet. Sed repudiandae omnis aut volupta
 // @TODO refactor with await
 
 const handleSubmit = () => {
-  console.log({username, email, password, phone, country, accept_rgpd: isChecked, preferences:{language: 'fr'}})
+  //console.log({username, email, password, phone, country, accept_rgpd: isChecked, preferences:{language: 'fr'}})
   fetch(`${url_backend}/users/signup`, {
     method: "POST", 
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({username, email, password, phone, country, accept_rgpd: isChecked, preferences:{language: deviceLanguage}})
+    body: JSON.stringify({username, email, password, phone, country, accept_rgpd: isChecked, preferences:{language: deviceLanguage, promotion:isCheckedNewsletter}})
   }).then(response => response.json())
   .then(data => {
     !username ? setErrorUsername("Le nom d'utilisateur est requis") : setErrorUsername('');
@@ -65,8 +67,8 @@ const handleSubmit = () => {
     !isChecked ? setErrorIsChecked("Vous n'avez pas accepté les conditions générales de Vehicost") : setErrorIsChecked('');
     if(data.result){
       dispatch(addUsername({username, token: data.token}));
-      navigation.navigate('Sign in')
-    } 
+      navigation.navigate('Ajouter un vehicule')
+    } else {}
   })
 };
 
@@ -81,10 +83,11 @@ function handleSelectedCountry(country) {
 function handleBack() {
   navigation.navigate('Welcome');
 }
-console.log(errorIsChecked )
+//console.log(errorIsChecked )
 return (
-    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={styles.container}>
-
+  <SafeAreaView style={global.mainContainer}>
+    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={0} style={styles.container}>
+      <View style={global.mainWrapper}>
         <View style={styles.backpage}>
           <TouchableOpacity onPress={() => handleBack()}>
           <Text style={styles.msgback}>Retour</Text>
@@ -98,30 +101,48 @@ return (
     
       <View style={styles.field} >
         <View style={styles.inputusername}>
-          <TextInput style={styles.input} placeholder="Nom d'utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username}  type="text" id="username"/>
+          <TextInput style={styles.input}  placeholder="Nom d'utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username}  type="text" id="username"/>
           <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
         </View>
         <View style={styles.inputemail}>
-          <TextInput style={styles.input} placeholder="Email *" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
+          <TextInput style={styles.input}  autoCapitalize='none' placeholder="Email *" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
           <Text style={styles.error}>{errorEmail.length > 0 && errorEmail}</Text>
         </View>
         <View style={styles.inputpassword}>
-          <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true }  onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
+          <TextInput style={styles.input}   autoCapitalize='none' placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true }  onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
           <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
        </View>
        
        <PhoneInput onChangeText={(value) => setPhone(value) }  
-       value={phone}
+        value={phone}
         onChangePhoneNumber={handlephoneNumber}
         selectedCountry={selectedCountry}
         onChangeSelectedCountry={handleSelectedCountry}
-        language='fr'
-        defaultCountry='fr'
-        showOnly={['FR', 'ES']}
-        modalDisabled
+        language={deviceLanguage}
+        defaultCountry={deviceLanguage}
+        /* showOnly={['FR', 'ES']}
+        modalDisabled */
+        autoFormat
         placeholder='Téléphone' 
-        customCarret={'<></>'}/>
+        customCarret={'<></>'}
+        phoneInputStyles={{
+          container: {
+            backgroundColor: '#ffffff',
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: gColor.mainColor,
+            height:56
+          },
 
+          flagContainer: {
+            borderTopLeftRadius: 7,
+            borderBottomLeftRadius: 7,
+            backgroundColor: gColor.lightColor,
+            justifyContent: 'center',
+        
+          },
+        }}
+        />
       <View style={styles.selectcountry}>
       <DropdownCountriesButton country={country} selectCountry={selectCountry} setCountry={setCountry} />
       </View>
@@ -132,36 +153,28 @@ return (
           <Text style={styles.modalText}>{condition}</Text>
         </View>
       </Modal>
-
       <View style ={styles.firstvalidation}>
         <View style={styles.combinaison}>
           <Checkbox style={styles.checkbox} value={isChecked} onValueChange={e => setChecked(!isChecked)} />
-            <TouchableHighlight style={styles.button} onPress={toggleModal}>
+            <Pressable style={styles.button} onPress={toggleModal}>
               <Text style={styles.buttonText}>J'accepte les conditions générales de VéhiCost</Text>
-            </TouchableHighlight>
+            </Pressable>
         </View>
-        <Text style={styles.errorCheck}>{errorIsChecked && errorIsChecked}</Text>
+        { errorIsChecked && <Text style={styles.errorCheck}>{errorIsChecked}</Text>}
       </View>
-
       </View>
- 
-
       <View style={styles.section}>
         <Checkbox style={styles.checkbox} value={isCheckedNewsletter} onValueChange={setCheckedNewsletter} />
         <Text style={styles.paragraph}>Je souhaite m'abonner à la newsletter de Véhicost</Text>
         </View>
       </View>
 
-      <View>
-      <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.textbtn}>S'inscrire</Text>
-      </TouchableOpacity>
-
-      
-      </View>  
-
+      <View style={{marginTop:40}}>
+        <SimpleButton textButton={'S\'inscrire'} callback={handleSubmit} />
+      </View> 
+      </View>
     </KeyboardAvoidingView>
-
+    </SafeAreaView> 
   )
 }
 
@@ -185,7 +198,7 @@ const styles = StyleSheet.create({
   checkbox: {
     margin: 8,
     padding: 8,
-
+    borderColor:gColor.mainColor
   },
   baseText: {
     fontSize: 25,
@@ -280,12 +293,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderStyle: 'solid',
-    backgroundColor: "white"
+    backgroundColor: "white",
+    shadowColor:'#474141', 
+    shadowOffset: { width: -7, height: -5, }, 
+    shadowOpacity: 1, 
+    shadowRadius: 14, 
+    elevation: -10,
   },
   modalText: {
-    fontSize: 15,
-    textAlign: 'left',
-    margin: 10,
+    padding:2*stepSize
   },
   selectcountry: {
     marginTop: 15,

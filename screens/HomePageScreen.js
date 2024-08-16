@@ -53,17 +53,16 @@ export default function HomePageScreen({ navigation }) {
   }, [vehData])
 
 const expenSes = vehData.expenses; 
-console.log(expenSes)
-/* const expenses = expenSes.map(exp=>{
+
+const expenses = expenSes && expenSes.map(exp=>{
   return (
     <View>
       <Text>{exp.category}</Text>
       <Text>{exp.amount}</Text>
       <Text>{moment.utc(exp.createdAt).local().format("dd-mm-yyyy")}</Text> 
-  
     </View>
   )
-});  */
+}); 
 
   return (
     <View style={styles.container}>
@@ -94,6 +93,7 @@ console.log(expenSes)
         <Text style={styles.text}></Text>
         </View>
       </View>
+
 
       {/*  AJOUTER UNE DEPENSE*/}
       <View>
