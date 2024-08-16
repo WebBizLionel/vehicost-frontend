@@ -53,7 +53,6 @@ const SigninScreen = ({ navigation }) => {
       <View>
       <Text style={styles.baseText}>Bienvenue sur VehiCost</Text>
       </View>
-
    
       <View style={styles.backpage}>
       <TouchableOpacity onPress={() => handleBack()}>
@@ -61,24 +60,21 @@ const SigninScreen = ({ navigation }) => {
       </TouchableOpacity>
       </View>
 
-      <View>
-      <Image style={styles.image} source={require('../assets/favicon.png')} />
+      <View style={styles.inputs}>
+
+        <View style={styles.inputemail}>
+          <TextInput style={styles.input} placeholder="Email ou Nom d’utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username} type="text" id="username"/>
+          <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
+        </View>
+        <View style={styles.inputpasseword}>
+          <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true } onChangeText={(value) => setPassword(value)} value={password} type="text" id="password" />
+          <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
+       </View>
       </View>
 
       <View>
-      <TextInput style={styles.input} placeholder="Email ou Nom d’utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username} type="text" id="username"/>
-      <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
-       <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true } onChangeText={(value) => setPassword(value)} value={password} type="text" id="password" />
-       <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
-      </View>
-
-     
-       {/*   https://www.youtube.com/watch?v=T-zTZn_xRBM */}
-     
-
-      <View>
-      <TouchableOpacity onPress={() => handleSubmit()}>
-        <Text>Se connecter</Text>
+      <TouchableOpacity onPress={() => handleSubmit()} style={styles.signin}> 
+        <Text style={styles.textbtn}>Se connecter</Text>
       </TouchableOpacity>
 
       </View>
@@ -95,19 +91,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingHorizontal:16,
   },
-  msgback: {
-    textAlign: 'center',
+  baseText: {
+    fontSize: 25,
+    marginBottom: 30, 
+  }, 
+  inputs: {
+    width: '100%',
   },
-  backpage: {
+  inputemail: {
+    fontSize: 20,
+    marginBottom: 70, 
+    padding: 10,
     borderWidth: 1,
-    width: 90,
-    height: 20,
-    marginTop: 10,
+    borderColor: '#038737',
+    marginBottom: 16,
+  },
+  inputpasseword: {
+    fontSize: 20,
+    marginBottom: 70, 
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginBottom: 16,
   },
   error: {
     color:'red',
     fontSize: 12,
-  }
+  },
+  textbtn: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
+  },
+  signin: {
+    marginTop: 30,
+    elevation: 8,
+    backgroundColor: "#038737",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: 300,
+  },
 })
