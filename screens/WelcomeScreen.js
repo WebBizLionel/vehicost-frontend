@@ -1,3 +1,4 @@
+import { StatusBar } from 'react-native';
 import { 
   StyleSheet, 
   Text, 
@@ -20,6 +21,11 @@ const WelcomeScreen = ({ navigation }) => {
 
   return (
     <Fragment>
+      <StatusBar 
+      backgroundColor={gColor.mainColor} 
+      StatusBarStyle={'light-content'}
+      StatusBarAnimation={'slide'}
+      />
     <SafeAreaView style={global.mainContainer}>
       <View style={{...global.w100, ...styles.topScreen}}>
         <WelcomeSlider/>

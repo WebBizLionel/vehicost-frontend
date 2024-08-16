@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { url_backend } from '../configuration/config';
 import { addUsername } from '../ reducers/user';
-import MaterialTextField from '../components/materialTextField';
+import SimpleButton from '../components/simpleButton';
 
 
 const SigninScreen = ({ navigation }) => {
@@ -73,9 +73,8 @@ const SigninScreen = ({ navigation }) => {
       </View>
 
       <View>
-      <TouchableOpacity onPress={() => handleSubmit()} style={styles.signin}> 
-        <Text style={styles.textbtn}>Se connecter</Text>
-      </TouchableOpacity>
+      <SimpleButton textButton={'Se connecter'} callback={handleSubmit} />
+     
 
       </View>
 
