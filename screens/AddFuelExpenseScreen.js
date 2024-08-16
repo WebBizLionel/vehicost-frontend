@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, SafeAreaView, KeyboardAvoidingView,Platform, Alert} from 'react-native';;
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
@@ -10,7 +10,7 @@ import Dropdown from 'react-native-input-select';
 
 const AddFuelExpenseScreen = ({ navigation }) => {
 
-  const user = useSelector((state) => state.user.value);
+const user = useSelector((state) => state.user.value);
 
 
 //STATE OF INPUT 
@@ -29,10 +29,11 @@ const AddFuelExpenseScreen = ({ navigation }) => {
 
 
 const [thevehicle, setTheVehicle] = useState([]);
-const [selectedVehicle, setSelectedVehicle] = useState("")
-/* console.log("selectedVehicle =>", selectedVehicle); */
+const [selectedVehicle, setSelectedVehicle] = useState("");
 
-
+const [uploadName, setUploadName] = useState("");
+const [uploadUri, setUploadUri] = useState("");
+const [uploadType, setUploadType] = useState("");
 
  const handleDate = (e, selectedDate) => {
     setDate(selectedDate);
@@ -55,9 +56,18 @@ _pickDocument = async () => {
 
     let result = await DocumentPicker.getDocumentAsync({});
     
-    alert(result.assets[0]);
+    if(result){
+      Alert.alert('Document séléctionné !')
+    }
     
-    // console.log(result);
+    console.log(result);
+
+   /*  setReceipt(result.assets[0].uri) */
+
+    setUploadName(result.assets[0].name)
+    setUploadUri(result.assets[0].uri)
+    setUploadType(result.assets[0].mimeType)
+
     
 }
 
@@ -68,9 +78,17 @@ if(photoUri) {
   // console.log({coucou: photoUri});
 
   formData.append('fileUpload', {
-    uri:photoUri, 
+    uri:uploadUri,
     name:'receiptPhoto', 
     type:'image/jpeg',
+  }); 
+}
+//
+if(receipt){ 
+  formData.append('fileUpload', {
+    uri: uploadName,
+    name:uploadName,
+    type:uploadType,
   }); 
 }
 
@@ -102,15 +120,19 @@ fetch(`${url_backend}/vehicles/expenses/add`,{
 
  //FETCH VEHICLE 
   useEffect(() => {  
+
+
     fetch(`${url_backend}/vehicles/get`, {
       headers: {Authorization: `Bearer ${user.token}`, "Content-Type": "application/json"},
     })  
       .then(response => response.json())  
        .then(data => {  
           setTheVehicle(data.vehicles);  
+
        });  
    }, []); 
  
+  console.log(receipt)
 
   return (
     
@@ -130,7 +152,13 @@ fetch(`${url_backend}/vehicles/expenses/add`,{
             <Text style={styles.thetitle} >Ajouter une dépense de carburant</Text>
         </View>
 
-
+        <Dropdown
+          placeholder="Quel véhicule est concerné par votre dépense ?"
+          options={thevehicle?.map((e) => {return {label: e.name, value: e._id}})}
+          selectedValue={selectedVehicle}
+          onValueChange={(value) => setSelectedVehicle(value)}
+          primaryColor={'green'}
+          />
                {/*  -----------------ADD PHOTO-------------------------------*/}
                <View style={styles.addreceipt}>
             <TouchableOpacity onPress={() => navigation.navigate('Camera', {type: "receipt", redirection:'Add Fuel Exprense'})}  >
@@ -138,27 +166,15 @@ fetch(`${url_backend}/vehicles/expenses/add`,{
             </TouchableOpacity>
         </View>
 
-        
-
-        <Dropdown
-      label="Vehicle"
-      placeholder="Choisir le vehicule"
-      options={thevehicle?.map((e) => {return {label: e.name, value: e._id}})}
-      selectedValue={selectedVehicle}
-      onValueChange={(value) => setSelectedVehicle(value)}
-      primaryColor={'green'}/>
-
-                {/*  -----------------UPLOAD -------------------------------*/}
-                <View style={styles.addupload}>
+                    {/*  -----------------UPLOAD -------------------------------*/}
+                    <View style={styles.addupload}>
             <TouchableOpacity onPress={this._pickDocument} >
                 <Text style={styles.theupload} > Joindre un fichier</Text>
             </TouchableOpacity>
         </View> 
-
-
                {/*  -----------------DATE -------------------------------*/}
-        <View>
-        <TextInput onPress= {() => showMode("date")} title="DATE" color="#841584"  placeholder='dd/mm/yyyy' value={inputDate} />
+        <View  style={styles.adddate}>
+        <TextInput onPress= {() => showMode("date")} title="DATE" color="#841584"  placeholder='dd/mm/yyyy' value={inputDate}  style={styles.textdate}  />
           {
             show && (
               <DateTimePicker
@@ -175,22 +191,22 @@ fetch(`${url_backend}/vehicles/expenses/add`,{
 
   {/*  -----------------LITTRE-------------------------------*/}
         <View style={styles.addliter}>
-        <TextInput style={styles.price} placeholder="Nombre de littre" keyboardType="numeric" onChangeText={(value) => setLiter(value)} value={liter}/>
+        <TextInput style={styles.textlitter} placeholder="Nombre de littre" keyboardType="numeric" onChangeText={(value) => setLiter(value)} value={liter}/>
         </View>        
 
           {/*  ADD PRICE*/}
         <View style={styles.addprice}>
-            <TextInput style={styles.price} placeholder="50 €" keyboardType="numeric" onChangeText={(value) => setPrice(value)} value={price}/>
+            <TextInput style={styles.textprice} placeholder="Exemple : 50 €" keyboardType="numeric" onChangeText={(value) => setPrice(value)} value={price}/>
         </View>
 
         {/*  ADD LOCATION*/}
         <View style={styles.addadress}>
-            <TextInput style={styles.location} placeholder="Adresse" onChangeText={(value) => setLocation(value)} value={location}/>
+            <TextInput style={styles.textlocation} placeholder="Adresse de la station service" onChangeText={(value) => setLocation(value)} value={location}/>
         </View>
 
         {/*  ADD COMMENT*/}
-        <View style={styles.addadress}>
-            <TextInput style={styles.location} placeholder="Note" onChangeText={(value) => setComment(value)} value={comment}/>
+        <View style={styles.addnote}>
+            <TextInput style={styles.textnote} placeholder="Ajouter une note à propos de cette dépense ?" onChangeText={(value) => setComment(value)} value={comment}/>
         </View>
 
 
@@ -214,15 +230,42 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
   },
   baseText: {
     fontSize: 25,
   }, 
+  
+  adddate: {
+    textAlign:'center',
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginTop: 20,
+    marginBottom: 10,
+    alignItems: 'center', 
+    width: '100%',
+  },
+  addreceipt: {
+    fontSize: 20,
+    marginBottom: 70, 
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginTop: 20,
+    marginBottom: 10
+  },
+  receipt: {
+   textAlign:'center',
+   padding: 20,
+  },
   addpicture: {
     padding: 34,
+    marginTop: 20,
+    marginBottom: 10,
   },
   thetitle: {
-    fontSize: 25,
+    fontSize: 20,
     padding: 34,
   },
   camera: {
@@ -237,16 +280,78 @@ const styles = StyleSheet.create({
     paddingBottom: 25,
     padding: 34,
   },
+  addupload: {
+    marginTop: 20,
+    marginBottom: 10,
+    padding: 1,
+  },
   theupload: {
-    fontSize: 25,
+    fontSize: 15,
     color: 'black',
-    padding: 34,
+    padding: 15,
+    textAlign:'center',
+    borderWidth: 1,
+    borderColor: '#038737',
+  },
+  textlitter: {
+    textAlign:'center',
+  },
+  textprice: {
+    textAlign:'center',
   },
   addliter: {
     padding: 34,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginTop: 20,
+    marginBottom: 10
   },
   location: {
     padding: 34,
+    borderWidth: 1,
+    borderColor: '#038737',
+  },
+  addprice: {
+    padding: 34,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  btnaddexpense: {
+    marginTop: 30,
+    elevation: 8,
+    backgroundColor: "#038737",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+ 
+  },
+  addexpense: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
+  },
+  addadress: {
+    padding: 34,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginTop: 10,
+    marginBottom: 10
+  },
+  addnote: {
+    padding: 34,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#038737',
+    marginTop: 10,
+    marginBottom: 10
   }
+
 })
 

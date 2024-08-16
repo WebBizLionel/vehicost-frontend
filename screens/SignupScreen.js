@@ -95,7 +95,6 @@ return (
       <Text style={styles.baseText}>Bienvenue sur VehiCost</Text>
       </View>
 
-    
       <View style={styles.field} >
         <View style={styles.inputusername}>
           <TextInput style={styles.input} placeholder="Nom d'utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username}  type="text" id="username"/>
@@ -156,8 +155,6 @@ return (
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
         <Text style={styles.textbtn}>S'inscrire</Text>
       </TouchableOpacity>
-
-      
       </View>  
 
     </KeyboardAvoidingView>
@@ -207,7 +204,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#038737',
     marginBottom: 16,
-
   },
   inputpassword: {
     fontSize: 20,

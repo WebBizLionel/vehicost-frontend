@@ -23,7 +23,11 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={{...global.w100, ...styles.bottomScreen}}>
         <View style={{...global.mainWrapper, ...styles.bottomWrapper}}>
           <View>
-            <SimpleButton callback={handlePress = () => navigation.navigate('Sign Up')}/>
+          <SimpleButton callback={handlePress = () => navigation.navigate('Sign Up')}/>
+            <SimpleButton callback={handlePress = () => navigation.navigate('Add Vehicle')}/>
+            <SimpleButton callback={handlePress = () => navigation.navigate('Sign in')}/>
+            <SimpleButton callback={handlePress = () => navigation.navigate('Add Fuel Exprense')}/>
+            <SimpleButton callback={handlePress = () => navigation.navigate('Add Insurance Expense')}/>
           </View>
           <View style={styles.contactLink}>
             <Simplelinking style={{...global.link, ...global.textRight}} hoverStyle={{...global.linkPressed,...global.textRight}} url='mailto:support@vehicost.com?subject=Contacter le support VehiCost&body=Bonjour le support !  ❤️' text='Contacter le support'/>
