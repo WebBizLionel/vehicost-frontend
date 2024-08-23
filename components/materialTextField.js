@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, Animated } from 'react-native';
+import React, { useState } from "react";
+import { View, TextInput, Text, StyleSheet, Animated } from "react-native";
 
 const MaterialTextField = ({ label, value, onChangeText }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -26,7 +26,7 @@ const MaterialTextField = ({ label, value, onChangeText }) => {
   };
 
   const labelStyle = {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     top: animatedIsFocused.interpolate({
       inputRange: [0, 1],
@@ -38,15 +38,13 @@ const MaterialTextField = ({ label, value, onChangeText }) => {
     }),
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: ['#aaa', '#6200ee'],
+      outputRange: ["#aaa", "#6200ee"],
     }),
   };
 
   return (
     <View style={styles.container}>
-      <Animated.Text style={labelStyle}>
-        {label}
-      </Animated.Text>
+      <Animated.Text style={labelStyle}>{label}</Animated.Text>
       <TextInput
         style={[styles.input, isFocused && styles.inputFocused]}
         onFocus={handleFocus}
@@ -68,19 +66,19 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     fontSize: 16,
-    color: '#000',
+    color: "#000",
     borderBottomWidth: 1,
-    borderBottomColor: '#aaa',
+    borderBottomColor: "#aaa",
   },
   inputFocused: {
-    borderBottomColor: '#6200ee',
+    borderBottomColor: "#6200ee",
   },
   underline: {
     height: 2,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   underlineFocused: {
-    backgroundColor: '#6200ee',
+    backgroundColor: "#6200ee",
   },
 });
 
