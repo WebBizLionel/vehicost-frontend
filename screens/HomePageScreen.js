@@ -3,8 +3,8 @@ import React from 'react'
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { url_backend } from '../configuration/config';
 import { useState, useEffect} from 'react'; 
-import { useSelector } from 'react-redux'; 
-import moment from "moment"
+import { useSelector } from 'react-redux'; 
+import moment from 'moment'; 
 
 export default function HomePageScreen({ navigation }) {
 
@@ -14,40 +14,38 @@ export default function HomePageScreen({ navigation }) {
   const [totalCost, setTotalCost] = useState(0); 
 
   const leavePage = () => {
-    navigation.navigate('Welcome');
+    navigation.navigate('Bienvenue');
   }
 
  //ROUTE GET VEHICULE
- useEffect(() => {  
+ useEffect(() => {  
   fetch(`${url_backend}/vehicles/get`, {
     headers: {Authorization: `Bearer ${user.token}`, "Content-Type": "application/json"},
   })  
-    .then(response => response.json())  
-     .then(data => {  
+    .then(response => response.json())  
+     .then(data => {  
       if(data.result){
         setvehData({...vehData, id: data.vehicles[0]._id, name:data.vehicles[0].name, expenses:data.vehicles[0].expenses})
       }
-     });
+     });
 
- }, []);
+ }, []);
 
-  //FETCH DEPENSE
+  //Fetch expenses
   useEffect(()=>{
     const start = moment().utc().startOf("month").valueOf();
     const end = moment().utc().valueOf();
-
-
-    const query = start && end ? `?start_date${start}&end_date${end}` : ''; 
-    console.log(vehData.id)
+    const query = start && end ? `?start_date=${start}&end_date=${end}` : ''; 
+   
     if(vehData.id){
 
       fetch(`${url_backend}/vehicles/expenses/get/${vehData.id}${query}`, {
         headers: {Authorization: `Bearer ${user.token}`, "Content-Type": "application/json"},
       })
-      .then(response => response.json())
-           .then(data => {    
-      setTotalCost(data.vehicle[0].total_cost)
-      
+      .then(response => response.json())
+           .then(data => {   
+            const totalCost = data.vehicle && data.vehicle.length > 0 ? data.vehicle[0].total_cost : 0; 
+            setTotalCost(totalCost)
     }
   )}
   }, [vehData])

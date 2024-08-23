@@ -15,7 +15,7 @@ import SimpleLink from '../components/simpleLink';
 import {global} from '../styles/style';
 import { diMension, gColor, stepSize } from '../styles/variablesCSS';
 import Email from '@material-design-icons/svg/outlined/email.svg';
-import WelcomeSlider from '../components/welcomeSlider';
+import WelcomeSlider from '../components/WelcomeSlider';
 
 const WelcomeScreen = ({ navigation }) => {
 
@@ -33,9 +33,9 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={{...global.w100, ...styles.bottomScreen}}>
         <View style={{...global.mainWrapper, ...styles.bottomWrapper}}>
           <View>
-            <SimpleButton textButton={'Inscription'} callback={handlePress = () => navigation.navigate('Sign Up')} />
+            <SimpleButton textButton={'Inscription'} callback={handlePress = () => navigation.navigate('Inscription')} />
             <Text style={{...global.defaultH6,...global.textCenter, ...styles.signIntext}}>Vous avez déjà un compte ?</Text> 
-            <SimpleLink text={'Se connecter'} txtstyle={{...styles.signInLink,...global.textCenter, ...global.textLink}} callback={() => navigation.navigate('Sign in')} txtColor={gColor.mainColor} txtHoverColor={gColor.additionalColor}/>
+            <SimpleLink text={'Se connecter'} txtstyle={{...styles.signInLink,...global.textCenter, ...global.textLink}} callback={() => navigation.navigate('Connexion')} txtColor={gColor.mainColor} txtHoverColor={gColor.additionalColor}/>
           </View>
           <View style={styles.contactLinkWrapper}>
             <Simplelinking style={styles.contactLink} txtStyle={{...global.link, ...{lineHeight:22}}}  txtHoverStyle={{...global.linkPressed,...{lineHeight:22}}} icon={<Email fill={gColor.mainColor} width={20}  height={20}/>} iconPress={<Email fill={gColor.additionalColor} width={20}  height={20}/>} url='mailto:support@vehicost.com?subject=Contacter le support VehiCost&body=Bonjour le support !  ❤️' text='Contacter le support'/>

@@ -26,7 +26,7 @@ const global = {
     link:{
         color:gColor.mainColor,
         fontSize:textSize.textBody,
-       fontFamily:'SourceSansPro-Regular'
+        fontFamily:'SourceSansPro-Regular'
     },
     linkPressed:{
         color:gColor.additionalColor,
@@ -57,7 +57,6 @@ const global = {
         fontSize:textSize.textBody,
         color:gColor.textColor,
         fontFamily:'SourceSansPro-Regular', 
-        lineHeight: 100, 
     }, 
     defaultH6:{
         fontSize:textSize.subTitle,

@@ -7,11 +7,9 @@ import { url_backend } from '../configuration/config';
 import { useSelector } from 'react-redux';
 import Dropdown from 'react-native-input-select';
 
-
 const AddFuelExpenseScreen = ({ navigation }) => {
 
 const user = useSelector((state) => state.user.value);
-
 
 //STATE OF INPUT 
  const [liter, setLiter] = useState('');

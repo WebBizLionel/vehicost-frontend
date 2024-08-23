@@ -6,12 +6,11 @@ import { useSelector } from 'react-redux';
 import { url_backend } from '../configuration/config';
 import { addPic } from '../ reducers/user';
 
-
 const AddVehicleScreen = ({ navigation }) => {
 
   //REDIRECTION
 const leavePage = () => {
-  navigation.navigate('Welcome');
+  navigation.navigate('DrawerNavigator', {screen:'TabNavigator'});
 }
 
 //USE SELECTOR
@@ -67,8 +66,6 @@ const handleSubmit = () => {
   const formData = new FormData();
 
   if(photoUri) {
-    console.log({coucou: photoUri});
-
     formData.append('fileUpload', {
       uri:photoUri, 
       name:'vehiclePhoto', 
@@ -89,9 +86,6 @@ const handleSubmit = () => {
   }).then(res=>res.json()).then(json=> console.log(JSON.stringify(json))) 
   navigation.navigate('Add Fuel Exprense')
 };
-
-
-
 
 return (
 

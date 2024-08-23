@@ -14,11 +14,11 @@ const SigninScreen = ({ navigation }) => {
 
   const dispatch = useDispatch(); 
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const [errorUsername, setErrorUsername] = useState("");
-  const [errorPassword, setErrorPassword] = useState("");
+  const [errorUsername, setErrorUsername] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
 
   const handleSubmit = () => {
     fetch(`${url_backend}/users/signin`, {
@@ -30,8 +30,9 @@ const SigninScreen = ({ navigation }) => {
       !username ? setErrorUsername("L'email est requis") : setErrorUsername('');
       !password ? setErrorPassword('Le mot de passe est obligatoire') : password.length < 6 ? setErrorPassword('Mot de passe de plus de 6 caractere') : setErrorPassword('');
       if(data.result){
-        navigation.navigate('Ajouter un vehicule');
+
         dispatch(addUsername({username,token: data.token})); 
+        navigation.navigate('Ajouter un vehicule');
       }else{
         Alert.alert('', data.error, [
          
@@ -43,7 +44,7 @@ const SigninScreen = ({ navigation }) => {
   };
 
   function handleBack() {
-    navigation.navigate('Welcome');
+    navigation.navigate('Bienvenue');
   }
 
   return (
@@ -63,11 +64,28 @@ const SigninScreen = ({ navigation }) => {
       <View style={styles.inputs}>
 
         <View style={styles.inputemail}>
-          <TextInput style={styles.input} placeholder="Email ou Nom d’utilisateur *" keyboardType="text" onChangeText={(value) => setUsername(value)} value={username} type="text" id="username"/>
+          <TextInput 
+            style={styles.input} 
+            placeholder="Email ou Nom d’utilisateur *" 
+            keyboardType="text" onChangeText={(value) => setUsername(value)} value={username} 
+            type="text" 
+            id="username"
+            autoCapitalize='none'
+          />
           <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
         </View>
         <View style={styles.inputpasseword}>
-          <TextInput style={styles.input} placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true } onChangeText={(value) => setPassword(value)} value={password} type="text" id="password" />
+          <TextInput 
+            style={styles.input} 
+            placeholder="Mot de passe *" 
+            keyboardType="text" 
+            autoCapitalize='none'
+            secureTextEntry = { true } 
+            onChangeText={(value) => setPassword(value)} 
+            value={password} 
+            type="text" 
+            id="password" 
+            />
           <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
        </View>
       </View>

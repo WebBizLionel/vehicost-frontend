@@ -26,6 +26,9 @@ const helpers = {
     flexDirectionRow: {
         flexDirection:'row'
     },
+    alignItemsCenter:{
+        alignItems:'center'
+    },
     w100:{
         width:diMension.d_12_12
     }, 

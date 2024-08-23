@@ -8,6 +8,7 @@ const gColor = {
     lightColor:'#f5fff9',
     textColor: '#222222', 
     additionalColor: '#DC564E',
+    darkAdditionalColor:'#a22720',
     lightAdditionalColor:'#fdf7f6',
     bgColor:'#FFFFFF', 
     bgColor2:'#F6F6F4',

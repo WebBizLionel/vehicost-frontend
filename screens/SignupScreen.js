@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, TouchableHighlight, Pressable,SafeAreaView } from 'react-native';
-import Modal from "react-native-modal";
+import Modal from 'react-native-modal';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Checkbox from 'expo-checkbox';
@@ -18,13 +18,13 @@ const SignupScreen = ({ navigation, ...props}) => {
 const dispatch = useDispatch(); 
 
 //STATES OF INPUTS
-const [username, setUsername] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
+const [username, setUsername] = useState('');
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
 const [isChecked, setChecked] = useState(false);
 const [isCheckedNewsletter, setCheckedNewsletter] = useState(false);
 
-const [country, setCountry] = useState("");
+const [country, setCountry] = useState('');
 
 const selectCountry = (country) => {
   setCountry(country);
@@ -32,16 +32,16 @@ const selectCountry = (country) => {
 
 const [selectedCountry, setSelectedCountry] = useState(null);
 
-const [phone, setPhone] = useState("");
+const [phone, setPhone] = useState('');
 const [deviceLanguage, setDeviceLanguage] = useState(getLocales()[0].languageCode);
 /*console.log(deviceLanguage)*/
 
 
 //STATE OF ERROR 
-const [errorUsername, setErrorUsername] = useState("");
-const [errorEmail, setErrorEmail] = useState("");
-const [errorPassword,setErrorPassword] = useState("");
-const [errorIsChecked,setErrorIsChecked] = useState("");
+const [errorUsername, setErrorUsername] = useState('');
+const [errorEmail, setErrorEmail] = useState('');
+const [errorPassword,setErrorPassword] = useState('');
+const [errorIsChecked,setErrorIsChecked] = useState('');
 
 //MODAL 
 const [isModalVisible, setModalVisible] = useState(false)
@@ -67,6 +67,8 @@ const handleSubmit = () => {
     !isChecked ? setErrorIsChecked("Vous n'avez pas accepté les conditions générales de Vehicost") : setErrorIsChecked('');
     if(data.result){
       dispatch(addUsername({username, token: data.token}));
+
+      console.log(data.result)
       navigation.navigate('Ajouter un vehicule')
     } else {}
   })
@@ -80,10 +82,11 @@ function handleSelectedCountry(country) {
   setSelectedCountry(country);
 }
 
+// Go back
 function handleBack() {
-  navigation.navigate('Welcome');
+  navigation.navigate('Bienvenue');
 }
-//console.log(errorIsChecked )
+
 return (
   <SafeAreaView style={global.mainContainer}>
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={0} style={styles.container}>
@@ -104,15 +107,15 @@ return (
           <Text style={styles.error}>{errorUsername.length > 0 && errorUsername}</Text>
         </View>
         <View style={styles.inputemail}>
-          <TextInput style={styles.input}  autoCapitalize='none' placeholder="Email *" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
+          <TextInput style={styles.input}  autoCapitalize='none' placeholder="Email *" keyboardType="text" onChangeText= {(value)=> setEmail(value)} value={email} type="text" id="email"/>
           <Text style={styles.error}>{errorEmail.length > 0 && errorEmail}</Text>
         </View>
         <View style={styles.inputpassword}>
-          <TextInput style={styles.input}   autoCapitalize='none' placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true }  onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
+          <TextInput style={styles.input}   autoCapitalize='none' placeholder="Mot de passe *" keyboardType="text" secureTextEntry = { true }  onChangeText=  {(value) => setPassword(value)} value={password} id="password"/>
           <Text style={styles.error}>{errorPassword.length > 0 && errorPassword}</Text>
        </View>
        
-       <PhoneInput onChangeText={(value) => setPhone(value) }  
+       <PhoneInput onChangeText={(value) => setPhone(value) }  
         value={phone}
         onChangePhoneNumber={handlephoneNumber}
         selectedCountry={selectedCountry}
