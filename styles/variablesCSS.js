@@ -7,6 +7,7 @@ const gColor = {
     secondColor : '#015A25',
     lightColor:'#f5fff9',
     textColor: '#222222', 
+    greyColor:'#eff1f1', 
     additionalColor: '#DC564E',
     darkAdditionalColor:'#a22720',
     lightAdditionalColor:'#fdf7f6',

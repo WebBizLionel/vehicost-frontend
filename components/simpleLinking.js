@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Linking, Pressable} from 'react-native';
+import { Text, Linking, Pressable} from 'react-native';
 import { useState } from 'react';
 
 

@@ -4,7 +4,7 @@ import React from 'react';
 import { gColor, stepSize } from "../styles/variablesCSS";
 import { global } from "../styles/style";
 
-const ModalNavMenuItem = ({item}) => {
+const ModalNavMenuItem = ({item, navigation}) => {
    
     const [Colors, setColors] = useState({
         fill: gColor.mainColor,

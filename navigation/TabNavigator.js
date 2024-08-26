@@ -19,9 +19,6 @@ import Modal from "react-native-modal";
 import AddExpenseTabNavButton from "../components/AddExpenseTabNavButton";
 import ModalNavMenuItem from "../components/ModalNavMenuItem";
 
-//Logo
-import LogoTitle from "../components/LogoTitle";
-
 //Icons
 import Home from "../assets/icons/home.svg";
 import Gas from "@material-design-icons/svg/outlined/local_gas_station.svg";
@@ -68,7 +65,7 @@ const TabNavigator = ({ navigation }) => {
 
    const modalNavMenu = modalNavMenuItems.map((item,index) => {
       return (
-         <ModalNavMenuItem item={item} key={index} />
+         <ModalNavMenuItem item={item} navigation={navigation} key={index} />
       )
    });
 
@@ -92,12 +89,7 @@ const TabNavigator = ({ navigation }) => {
       <>
          <Tab.Navigator    
             screenOptions={({ route }) => ({
-               headerTitle: (props) => <LogoTitle width={160} {...props} />,
-               headerStyle: {
-                  backgroundColor:gColor.mainColor,
-               },
-               headerTintColor: '#ffffff',
-               headerTitleAlign:'center',
+               headerShown:false, 
                tabBarIcon: ({ color, size, focused }) => {
 
                   const icons = {
@@ -214,7 +206,7 @@ const styles = StyleSheet.create({
       borderRadius: 8,
       backgroundColor: "#ffffff",
       paddingVertical: 2 * stepSize,
-      bottom: "14%",
+      bottom: 104,
       width: "auto",
    },
 });
