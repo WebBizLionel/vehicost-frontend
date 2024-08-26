@@ -89,7 +89,8 @@ const DrawerNavigator = ({navigation}) => {
           drawerIcon:({focused,size}) => (
             <Person style={{marginLeft:4, marginRight:-14}} fill={focused ? '#ffffff' : gColor.textColor} width={size} heigth={size} />
           ),
-          headerTitle:'Mon compte'
+          headerTitle:'Mon compte',
+          headerTitleAlign:'left',
         }}
       />
       <Drawer.Screen
@@ -99,7 +100,8 @@ const DrawerNavigator = ({navigation}) => {
           drawerIcon:({focused,size}) => (
             <Car style={{marginLeft:4, marginRight:-14}} fill={focused ? '#ffffff' : gColor.textColor} width={size} heigth={size} />
           ),
-          headerTitle:'Mes véhicules'
+          headerTitle:'Mes véhicules',
+          headerTitleAlign:'left',
         }}
       />
       

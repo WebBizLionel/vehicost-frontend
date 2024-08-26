@@ -33,6 +33,9 @@ const StackNavigator = () => {
           backgroundColor:gColor.mainColor,
         },
         headerTintColor: '#ffffff',
+        headerTitleStyle:{
+          fontFamily:'Montserrat-SemiBold',
+        }
         }}>
 
         <Stack.Screen name="Bienvenue" component={WelcomeScreen} />
