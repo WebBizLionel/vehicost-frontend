@@ -7,94 +7,108 @@ import { addPhoto } from "../ reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useIsFocused } from "@react-navigation/native";
 
-export default function CameraScreen({route , navigation: {goBack}}) {
-	const dispatch = useDispatch();
-	const isFocused = useIsFocused();
+export default function CameraScreen({ route, navigation: { goBack } }) {
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
-    console.log("Params => ", route.params.type);
-    
+  console.log("Params => ", route.params.type);
 
-	const [hasPermission, setHasPermission] = useState(false);
-	const [type, setType] = useState(CameraType.back);
-	const [flashMode, setFlashMode] = useState(FlashMode.off);
+  const [hasPermission, setHasPermission] = useState(false);
+  const [type, setType] = useState(CameraType.back);
+  const [flashMode, setFlashMode] = useState(FlashMode.off);
 
-	let cameraRef = useRef(null);
+  let cameraRef = useRef(null);
 
-	useEffect(() => {
-		(async () => {
-			const result = await Camera.requestCameraPermissionsAsync();
-			setHasPermission(result.status === "granted");
-		})();
-	}, []);
+  useEffect(() => {
+    (async () => {
+      const result = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(result.status === "granted");
+    })();
+  }, []);
 
-	if (!hasPermission || !isFocused) {
-		return <View />;
-	}
+  if (!hasPermission || !isFocused) {
+    return <View />;
+  }
 
-	const takePicture = async () => {
-       
-        
-		const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
-		if (photo) {
-			const uri = photo.uri;
-			dispatch(addPhoto(uri));
-            goBack();
-		}
-	};
+  const takePicture = async () => {
+    const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
+    if (photo) {
+      const uri = photo.uri;
+      dispatch(addPhoto(uri));
+      goBack();
+    }
+  };
 
-	if (!hasPermission || !isFocused) {
-		return <View />;
-	}
+  if (!hasPermission || !isFocused) {
+    return <View />;
+  }
 
-	return (
-		<Camera type={type} flashMode={flashMode} ref={(ref) => (cameraRef = ref)} style={styles.camera}>
-			<View style={styles.buttonsContainer}>
+  return (
+    <Camera
+      type={type}
+      flashMode={flashMode}
+      ref={(ref) => (cameraRef = ref)}
+      style={styles.camera}
+    >
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          onPress={() =>
+            setFlashMode(
+              flashMode === FlashMode.off ? FlashMode.torch : FlashMode.off
+            )
+          }
+          style={styles.button}
+        >
+          <FontAwesome
+            name="flash"
+            size={25}
+            color={flashMode === FlashMode.off ? "#ffffff" : "#e8be4b"}
+          />
+        </TouchableOpacity>
 
-				<TouchableOpacity onPress={() => setFlashMode(flashMode === FlashMode.off ? FlashMode.torch : FlashMode.off)} style={styles.button}>
-					<FontAwesome name="flash" size={25} color={flashMode === FlashMode.off ? "#ffffff" : "#e8be4b"} />
-				</TouchableOpacity>
+        <TouchableOpacity onPress={() => goBack()}>
+          <FontAwesome
+            name="arrow-left"
+            size={25}
+            color={flashMode === FlashMode.off ? "#ffffff" : "#e8be4b"}
+          />
+        </TouchableOpacity>
+      </View>
 
-				<TouchableOpacity onPress={() => goBack()}>
-					<FontAwesome name="arrow-left" size={25} color={flashMode === FlashMode.off ? "#ffffff" : "#e8be4b"} />
-				</TouchableOpacity>
-			</View>
-
-            
-
-			<View style={styles.snapContainer}>
-				<TouchableOpacity onPress={() => cameraRef && takePicture()}>
-					<FontAwesome name="circle-thin" size={95} color="#ffffff" />
-				</TouchableOpacity>
-			</View>
-		</Camera>
-	);
+      <View style={styles.snapContainer}>
+        <TouchableOpacity onPress={() => cameraRef && takePicture()}>
+          <FontAwesome name="circle-thin" size={95} color="#ffffff" />
+        </TouchableOpacity>
+      </View>
+    </Camera>
+  );
 }
 
 const styles = StyleSheet.create({
-	camera: {
-		flex: 1,
-	},
-	buttonsContainer: {
-		flex: 0.1,
-		flexDirection: "row",
-		alignItems: "flex-end",
-		justifyContent: "space-between",
-		paddingTop: 20,
-		paddingLeft: 20,
-		paddingRight: 20,
-	},
-	button: {
-		width: 44,
-		height: 44,
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: "rgba(0, 0, 0, 0.2)",
-		borderRadius: 50,
-	},
-	snapContainer: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "flex-end",
-		paddingBottom: 25,
-	},
+  camera: {
+    flex: 1,
+  },
+  buttonsContainer: {
+    flex: 0.1,
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  button: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    borderRadius: 50,
+  },
+  snapContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingBottom: 25,
+  },
 });

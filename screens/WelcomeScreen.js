@@ -1,11 +1,4 @@
-import {
-   StyleSheet,
-   Text,
-   View,
-   TouchableOpacity,
-   Image,
-   Pressable,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { Fragment } from "react";
 import Simplelinking from "../components/SimpleLinking";

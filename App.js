@@ -27,9 +27,11 @@ const store = configureStore({
 });
 
 export default function App() {
-   //NavigationBAr (Android)
+   
+  //NavigationBAr (Android)
    NavigationBar.setBackgroundColorAsync(gColor.mainColor);
-   //fonts
+   
+   //Fonts
    const [loaded, error] = useFonts(fontStyles);
 
    useEffect(() => {
