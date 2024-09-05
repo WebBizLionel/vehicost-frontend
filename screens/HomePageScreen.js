@@ -48,8 +48,8 @@ const HomePageScreen = ({ navigation, ...props }) => {
       const start = moment().utc().startOf("month").valueOf();
       const end = moment().utc().valueOf();
 
-      const query = start && end ? `?start_date${start}&end_date${end}` : "";
-      /* console.log(vehData.id) */
+      const query = start && end ? `?start_date=${start}&end_date=${end}` : "";
+      
       if (vehData.id) {
          fetch(`${url_backend}/vehicles/expenses/get/${vehData.id}${query}`, {
             headers: {
