@@ -1,6 +1,5 @@
-
-import { StatusBar } from 'expo-status-bar';
-import * as NavigationBar from 'expo-navigation-bar';
+import { StatusBar } from "expo-status-bar";
+import * as NavigationBar from "expo-navigation-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +11,13 @@ import StackNavigator from "./navigation/StackNavigator";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./ reducers/user";
+import { persistStore, persistReducer } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import storage from "redux-persist/lib/storage";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+const reducers = combineReducers({ user });
+const persistConfig = { key: "Vehicost", storage };
+const persistor = persistStore(store);
 
 //Fonts
 import { useFonts } from "expo-font";
@@ -19,53 +25,55 @@ import * as SplashScreen from "expo-splash-screen";
 import { fontStyles } from "./styles/fontsStyle";
 
 //Style
-import { gColor } from './styles/variablesCSS';
+import { gColor } from "./styles/variablesCSS";
 
 // Store
 const store = configureStore({
-   reducer: { user },
+  reducer: persistReducer(persistConfig, reducers),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export default function App() {
-   
   //NavigationBAr (Android)
-   NavigationBar.setBackgroundColorAsync(gColor.mainColor);
-   
-   //Fonts
-   const [loaded, error] = useFonts(fontStyles);
+  NavigationBar.setBackgroundColorAsync(gColor.mainColor);
 
-   useEffect(() => {
-      if (loaded || error) {
-         SplashScreen.hideAsync();
-      }
-   }, [loaded, error]);
+  //Fonts
+  const [loaded, error] = useFonts(fontStyles);
 
-   if (!loaded && !error) {
-      return null;
-   }
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
 
-   return (
-      <Provider store={store}>
-         <StatusBar
-            backgroundColor={gColor.mainColor}
-            style='light'
-            StatusBarStyle={'light'}
-            animated={true}
-            StatusBarAnimation={'slide'}
-         />
-         <NavigationContainer>
-            <StackNavigator />
-         </NavigationContainer>
-         
-      </Provider>
-   );
+  if (!loaded && !error) {
+    return null;
+  }
+
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <StatusBar
+          backgroundColor={gColor.mainColor}
+          style="light"
+          StatusBarStyle={"light"}
+          animated={true}
+          StatusBarAnimation={"slide"}
+        />
+        <NavigationContainer>
+          <StackNavigator />
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
+  );
 }
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      alignItems: "center",
-      justifyContent: "center",
-   },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

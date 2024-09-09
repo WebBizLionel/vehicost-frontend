@@ -54,7 +54,8 @@
     "react-native-walkthrough-tooltip": "^1.6.0",
     "react-native-webview": "^13.10.5",
     "react-navigation-drawer": "^2.7.2",
-    "react-redux": "^9.1.2"
+    "react-redux": "^9.1.2",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

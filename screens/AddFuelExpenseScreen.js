@@ -33,6 +33,7 @@ const AddFuelExpenseScreen = ({ navigation }) => {
   const [inputDate, setInputDate] = useState(
     moment().local().format("DD-MM-YYYY")
   );
+
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("date");
 
@@ -76,7 +77,7 @@ const AddFuelExpenseScreen = ({ navigation }) => {
     setUploadType(result.assets[0].mimeType);
   };
 
-  const photoUri = user.pic[0];
+  const photoUri = user.pic[0]; 
   const formData = new FormData();
 
   if (photoUri) {
@@ -98,7 +99,7 @@ const AddFuelExpenseScreen = ({ navigation }) => {
   }
 
   const category = "carburant";
-  const expenses = { liter, price, location, comment, category };
+ /*  const expenses = { liter, price, location, comment, category }; */
 
   formData.append("vehicle_id", selectedVehicle);
   formData.append("liter", liter);

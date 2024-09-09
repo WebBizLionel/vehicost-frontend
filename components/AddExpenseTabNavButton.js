@@ -9,7 +9,6 @@ const AddExpenseTabNavButton = ({ modalVisible, onPress, style }) => {
    const animatedValue = useRef(new Animated.Value(0)).current;
 
    useEffect(() => {
-
       Animated.timing(animatedValue, {
         toValue: modalVisible ? 1 : 0,
         duration: 400,

@@ -56,7 +56,6 @@ const SigninScreen = ({ navigation }) => {
             if (data.result) {
                const token = data.token;
                dispatch(addUsername({ username, token }));
-
                //Destination
                if (CheckUserVehicle(token)) {
                   navigation.navigate("DrawerNavigator", {

@@ -17,7 +17,7 @@ const DropdownCountriesButton = ({ callback, ...props }) => {
         return e;
       })}
       selectedValue={props.country}
-      onValueChange={(value) => props.setCountry(value)}
+      onValueChange={(value) => props.selectCountry(value)}
       dropdownStyle={{
         borderColor: gColor.mainColor,
         backgroundColor: "transparent",
